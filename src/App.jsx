@@ -1,278 +1,370 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
-function App() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const revealsRef = useRef([]);
+export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const [themeColor, setThemeColor] = useState('#ff6b35');
+  const [themeSwitcherOpen, setThemeSwitcherOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
-      });
-    }, { threshold: 0.12 });
-
-    revealsRef.current.forEach((el) => {
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
+    // Hide loader after 2.5 seconds
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2500);
+    return () => clearTimeout(timer);
   }, []);
 
-  const addToRefs = (el) => {
-    if (el && !revealsRef.current.includes(el)) {
-      revealsRef.current.push(el);
-    }
-  };
+  const colors = [
+    { name: 'orange', value: '#ff6b35' },
+    { name: 'blue', value: '#6b4ae2ff' },
+    { name: 'green', value: '#2ecc71' },
+    { name: 'purple', value: '#9b59b6' },
+    { name: 'pink', value: '#e91e63' },
+  ];
 
-  const closeMenu = () => setIsMobileMenuOpen(false);
+  useEffect(() => {
+    document.documentElement.style.setProperty('--primary', themeColor);
+  }, [themeColor]);
+
+  const skills = [
+    { name: 'Python', level: 88 },
+    { name: 'JavaScript', level: 85 },
+    { name: 'Java', level: 78 },
+    { name: 'React / Next.js', level: 90 },
+    { name: 'LangChain / OpenAI', level: 86 },
+    { name: 'Node.js', level: 82 },
+  ];
+
+  const tools = [
+    { name: 'AWS / Docker', level: 76 },
+    { name: 'MongoDB', level: 80 },
+    { name: 'PostgreSQL', level: 80 },
+    { name: 'Git / GitHub', level: 85 },
+    { name: 'Tailwind CSS', level: 92 },
+  ];
+
+  const projects = [
+    {
+      title: 'GovAssist – AI Gov Assistant',
+      desc: 'AI-powered platform helping citizens navigate government schemes via conversational AI.',
+      img: '/images/govassist,png.jpeg',
+      link: 'https://govassistant.vercel.app',
+      tags: ['React.js', 'LangChain', 'OpenAI'],
+    },
+    {
+      title: 'EAMCET Rank Predictor',
+      desc: 'Predict your rank based on subject marks using historical data and trend analysis.',
+      img: '/images/eamcet.png.png',
+      link: 'https://eamcetrankchecker.vercel.app/',
+      tags: ['React.js', 'Supabase', 'ML'],
+    },
+    {
+      title: 'Automated GenAI Reports',
+      desc: 'System converting unstructured data into structured business intelligence reports.',
+      img: '/images/genai-report.png.jpeg',
+      link: 'https://reportgenerator.in/',
+      tags: ['Python', 'GenAI APIs'],
+    },
+    {
+      title: 'HM Cart Marketplace',
+      desc: 'Responsive full-stack e-commerce platform with modern UI components.',
+      img: '/images/hmcart.png',
+      link: 'https://kutikantiyashwanth.github.io/hm_cart/',
+      tags: ['React.js', 'JavaScript', 'CSS'],
+    },
+  ];
 
   return (
     <>
-      <div className="fixed inset-0 pointer-events-none bg-gradient-to-br from-orange-50/30 via-transparent to-amber-50/20 z-[-1]"></div>
-
-      {/* Navbar */}
-      <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-orange-100 px-5 md:px-10 py-4 flex justify-between items-center">
-        <div className="text-2xl md:text-3xl font-extrabold text-gray-900">
-          YK<span className="text-[var(--primary)]">.</span>
+      {/* Loading Screen */}
+      {loading && (
+        <div className="loader-wrapper">
+          <div className="loader-content">
+            <h1 className="loader-name">Yashwanth Kutikanti</h1>
+            <div className="loader-bar">
+              <div className="loader-progress"></div>
+            </div>
+            <p className="loader-text">Loading Portfolio...</p>
+          </div>
         </div>
+      )}
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8 text-sm font-semibold text-gray-700">
-          <a href="#about" className="hover:text-[var(--primary)] transition">Profile</a>
-          <a href="#projects" className="hover:text-[var(--primary)] transition">Works</a>
-          <a href="#skills" className="hover:text-[var(--primary)] transition">Stack</a>
-          <a href="#education" className="hover:text-[var(--primary)] transition">Education</a>
-          <a href="#achievements" className="hover:text-[var(--primary)] transition">Achievements</a>
-          <a href="#contact" className="hover:text-[var(--primary)] transition">Contact</a>
-        </div>
+      <button className="mobile-menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      </button>
 
-        {/* Mobile Menu Button */}
-        <button 
-          id="menu-btn" 
-          className="md:hidden text-2xl text-gray-800"
-          onClick={() => setIsMobileMenuOpen(true)}
-        >
-          <i className="fas fa-bars"></i>
-        </button>
-      </nav>
+      <aside className={`sidebar ${menuOpen ? 'open' : ''}`}>
+        <div className="logo">YK</div>
+        <nav>
+          <a href="#home" className={`nav-link ${activeSection === 'home' ? 'active' : ''}`} onClick={() => { setActiveSection('home'); setMenuOpen(false); }}>
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+            </svg>
+            Home
+          </a>
+          <a href="#about" className={`nav-link ${activeSection === 'about' ? 'active' : ''}`} onClick={() => { setActiveSection('about'); setMenuOpen(false); }}>
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+            </svg>
+            About
+          </a>
+          <a href="#skills" className={`nav-link ${activeSection === 'skills' ? 'active' : ''}`} onClick={() => { setActiveSection('skills'); setMenuOpen(false); }}>
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+            </svg>
+            Skills
+          </a>
+          <a href="#portfolio" className={`nav-link ${activeSection === 'portfolio' ? 'active' : ''}`} onClick={() => { setActiveSection('portfolio'); setMenuOpen(false); }}>
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+            </svg>
+            Projects
+          </a>
+          <a href="#contact" className={`nav-link ${activeSection === 'contact' ? 'active' : ''}`} onClick={() => { setActiveSection('contact'); setMenuOpen(false); }}>
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+            </svg>
+            Contact
+          </a>
+        </nav>
+      </aside>
 
-      {/* Mobile Menu */}
-      <div 
-        id="mobile-menu" 
-        className={`fixed inset-0 bg-white transform ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'} md:hidden z-40 flex flex-col pt-20 px-8 transition-transform duration-400 ease-in-out`}
-      >
-        <button 
-          id="close-btn" 
-          className="self-end text-3xl mb-10 text-gray-800"
-          onClick={closeMenu}
-        >
-          <i className="fas fa-times"></i>
-        </button>
-        <div className="flex flex-col gap-8 text-xl font-semibold text-center">
-          <a href="#about" onClick={closeMenu} className="hover:text-[var(--primary)] transition">Profile</a>
-          <a href="#projects" onClick={closeMenu} className="hover:text-[var(--primary)] transition">Works</a>
-          <a href="#skills" onClick={closeMenu} className="hover:text-[var(--primary)] transition">Stack</a>
-          <a href="#education" onClick={closeMenu} className="hover:text-[var(--primary)] transition">Education</a>
-          <a href="#achievements" onClick={closeMenu} className="hover:text-[var(--primary)] transition">Achievements</a>
-          <a href="#contact" onClick={closeMenu} className="hover:text-[var(--primary)] transition">Contact</a>
+      <div className="settings-icon" onClick={() => setThemeSwitcherOpen(!themeSwitcherOpen)}>
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+        </svg>
+      </div>
+
+      <div className={`theme-switcher ${themeSwitcherOpen ? '' : 'hidden'}`} style={{ opacity: themeSwitcherOpen ? 1 : 0, pointerEvents: themeSwitcherOpen ? 'auto' : 'none', transition: 'opacity 0.3s' }}>
+        <h4>Theme Colors</h4>
+        <div className="color-options">
+          {colors.map(color => (
+            <button
+              key={color.name}
+              className={`color-btn ${themeColor === color.value ? 'active' : ''}`}
+              style={{ background: color.value }}
+              onClick={() => setThemeColor(color.value)}
+            />
+          ))}
         </div>
       </div>
 
-      {/* Hero */}
-      <section className="min-h-screen flex items-center justify-center px-6 text-center pt-24 md:pt-0">
-        <div className="max-w-5xl animate__animated animate__fadeIn">
-          <h1 className="text-5xl md:text-8xl font-black tracking-tight leading-none mb-6 text-gradient">
-            Yashwanth<br/>Kutikanti
-          </h1>
-          <p className="text-lg md:text-2xl text-gray-700 max-w-3xl mx-auto mb-10">
-            AI & Full Stack Engineer — Creating intelligent, scalable solutions
+      <main className="main-content">
+        <section id="home" className="hero-section">
+          <div className="hero-text">
+            <h1>Hello, my name is <span>Yashwanth Kutikanti</span></h1>
+            <h2>I'm a <span>AI & Full Stack Developer</span></h2>
+            <p>
+              AI & Full Stack Developer skilled in building intelligent and scalable applications using React, Java, Python, and modern AI frameworks.
+              Passionate about creating AI-powered solutions that simplify public services and automate real-world processes.
+            </p>
+            <a href="#about" className="btn-primary">More About Me</a>
+          </div>
+          <div className="hero-image">
+            <img src="/images/yash.jpeg" alt="Yashwanth Kutikanti" />
+          </div>
+        </section>
+
+        <section id="about">
+          <h2 className="section-title">About Me</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            <div className="card">
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>Education</h3>
+              <div className="timeline-item">
+                <h4 style={{ fontSize: '1.25rem', fontWeight: '600' }}>KITS Huzurabad</h4>
+                <p style={{ color: '#a0a0a0', fontSize: '0.875rem', marginBottom: '0.5rem' }}>B.Tech — AI & Machine Learning</p>
+                <p style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary)' }}>7.94 CGPA</p>
+                <p style={{ fontSize: '0.875rem', color: '#666', marginTop: '0.25rem' }}>2022 – 2027</p>
+              </div>
+              <div className="timeline-item">
+                <h4 style={{ fontSize: '1.25rem', fontWeight: '600' }}>Shivani Jr College</h4>
+                <p style={{ color: '#a0a0a0', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Intermediate (MPC)</p>
+                <p style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary)' }}>9.1 CGPA</p>
+                <p style={{ fontSize: '0.875rem', color: '#666', marginTop: '0.25rem' }}>2020 – 2022</p>
+              </div>
+            </div>
+
+            <div className="card">
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>Achievements</h3>
+              <ul style={{ listStyle: 'none', padding: 0 }}>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1.5rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>🔐</span>
+                  <div>
+                    <h4 style={{ fontWeight: '600', marginBottom: '0.25rem' }}>Ethical Hacking Virtual Internship</h4>
+                    <p style={{ fontSize: '0.875rem', color: '#a0a0a0' }}>EduSkills / AICTE — Oct–Dec 2025</p>
+                  </div>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1.5rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>☁️</span>
+                  <div>
+                    <h4 style={{ fontWeight: '600', marginBottom: '0.25rem' }}>AWS Academy Data Engineering</h4>
+                    <p style={{ fontSize: '0.875rem', color: '#a0a0a0' }}>10-week intensive training</p>
+                  </div>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>🏆</span>
+                  <div>
+                    <h4 style={{ fontWeight: '600', marginBottom: '0.25rem' }}>CODESTORM 2026</h4>
+                    <p style={{ fontSize: '0.875rem', color: '#a0a0a0' }}>National Hackathon Participant</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="process">
+          <h2 className="section-title">How I Work</h2>
+          <p style={{ color: '#a0a0a0', fontSize: '1.1rem', marginBottom: '3rem', maxWidth: '800px' }}>
+            From idea to shipped product — here's my proven process for turning concepts into reality
           </p>
-          <div className="flex flex-col sm:flex-row gap-5 justify-center">
-            <a href="https://www.linkedin.com/in/kutikanti-yashwanth-6bb1bb351?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noreferrer"
-               className="px-10 py-4 bg-[var(--primary)] text-white font-semibold rounded-xl shadow-lg shadow-orange-200/50 hover:bg-[var(--primary-dark)] hover:shadow-orange-300/60 transition-all transform hover:-translate-y-1">
-              LinkedIn Profile
-            </a>
-            <a href="#projects"
-               className="px-10 py-4 card font-semibold text-gray-800 hover:text-[var(--primary)] transition-all transform hover:-translate-y-1">
-              View Projects →
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <main className="max-w-6xl mx-auto px-6 pb-24 space-y-20 md:space-y-32">
-
-        {/* About */}
-        <section id="about" className="reveal" ref={addToRefs}>
-          <h2 className="text-sm font-black text-[var(--primary)] uppercase tracking-widest mb-8">01 // Profile</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-12 gap-10 items-center">
-            <div className="lg:col-span-7 order-2 md:order-1">
-              <h3 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">Intelligent Systems & Automation</h3>
-              <p className="text-gray-700 text-base md:text-lg leading-relaxed mb-8">
-                3rd-year B.Tech (AI & ML) @ KITS Huzurabad • 7.94 CGPA<br/>
-                Passionate about full-stack development and generative AI for real-world automation.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <span className="pill">Python</span>
-                <span className="pill">React / Next.js</span>
-                <span className="pill">LangChain</span>
-                <span className="pill">AWS</span>
-                <span className="pill">Node.js</span>
-              </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
+            <div className="process-card">
+              <div className="process-number">01</div>
+              <div className="process-icon">💡</div>
+              <h3>Ideate</h3>
+              <p>Identify problems, brainstorm solutions, and validate ideas with research and user feedback.</p>
             </div>
-            <div className="lg:col-span-5 order-1 md:order-2">
-              <div className="card p-3 aspect-square overflow-hidden">
-                <img src="/images/yash.jpeg" className="w-full h-full object-cover rounded-2xl hover:scale-105 transition-transform duration-700" alt="Yashwanth Kutikanti" />
-              </div>
+            <div className="process-card">
+              <div className="process-number">02</div>
+              <div className="process-icon">🎨</div>
+              <h3>Design</h3>
+              <p>Create wireframes, design UI/UX, and plan the architecture for scalable implementation.</p>
+            </div>
+            <div className="process-card">
+              <div className="process-number">03</div>
+              <div className="process-icon">⚙️</div>
+              <h3>Develop</h3>
+              <p>Build with modern tech stack, write clean code, and integrate AI/ML capabilities.</p>
+            </div>
+            <div className="process-card">
+              <div className="process-number">04</div>
+              <div className="process-icon">🧪</div>
+              <h3>Test</h3>
+              <p>Rigorous testing, debugging, performance optimization, and security checks.</p>
+            </div>
+            <div className="process-card">
+              <div className="process-number">05</div>
+              <div className="process-icon">🚀</div>
+              <h3>Ship</h3>
+              <p>Deploy to production, monitor performance, and iterate based on real-world usage.</p>
             </div>
           </div>
         </section>
 
-        {/* Skills */}
-        <section id="skills" className="reveal" ref={addToRefs}>
-          <h2 className="text-sm font-black text-[var(--primary)] uppercase tracking-widest mb-8">02 // Technical Stack</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="card p-8">
-              <h4 className="text-sm font-black uppercase text-[var(--primary)] mb-5">Frontend</h4>
-              <div className="flex flex-wrap gap-2">
-                <span className="pill">React.js</span>
-                <span className="pill">Next.js</span>
-                <span className="pill">Tailwind CSS</span>
-                <span className="pill">TypeScript</span>
-              </div>
-            </div>
-            <div className="card p-8">
-              <h4 className="text-sm font-black uppercase text-[var(--primary)] mb-5">Backend & AI</h4>
-              <div className="flex flex-wrap gap-2">
-                <span className="pill">Python</span>
-                <span className="pill">Node.js</span>
-                <span className="pill">LangChain</span>
-                <span className="pill">OpenAI API</span>
-              </div>
-            </div>
-            <div className="card p-8">
-              <h4 className="text-sm font-black uppercase text-[var(--primary)] mb-5">Cloud & Tools</h4>
-              <div className="flex flex-wrap gap-2">
-                <span className="pill">AWS</span>
-                <span className="pill">PostgreSQL</span>
-                <span className="pill">MongoDB</span>
-                <span className="pill">Git • Docker</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Projects */}
-        <section id="projects" className="reveal" ref={addToRefs}>
-          <h2 className="text-sm font-black text-[var(--primary)] uppercase tracking-widest mb-8">03 // Projects</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="card p-8 flex flex-col justify-between">
-              <div>
-                <div className="w-full h-48 bg-orange-50/30 rounded-xl mb-6 overflow-hidden border border-orange-100">
-                  <img src="/images/eamcet.png.png" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="EAMCET Rank Predictor" />
+        <section id="skills">
+          <h2 className="section-title">My Skills</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {skills.map(skill => (
+              <div key={skill.name} className="skill-item">
+                <div className="skill-name">
+                  <span>{skill.name}</span>
+                  <span>{skill.level}%</span>
                 </div>
-                <h4 className="text-2xl font-bold mb-4 text-gray-900 hover:text-[var(--primary)] transition">EAMCET Rank Predictor</h4>
-                <p className="text-gray-600 mb-6">Predict your rank based on subject marks using historical data and trend analysis. Built with Supabase and React.</p>
-              </div>
-              <a href="https://eamcetrankchecker.vercel.app/" target="_blank" rel="noreferrer" className="text-[var(--primary)] font-medium hover:underline">Live Demo →</a>
-            </div>
-
-            <div className="card p-8 flex flex-col justify-between">
-              <div>
-                <div className="w-full h-48 bg-orange-50/30 rounded-xl mb-6 overflow-hidden border border-orange-100">
-                  <img src="/images/genai-report.png.jpeg" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Automated GenAI Report" />
+                <div className="skill-bar">
+                  <div className="skill-progress" style={{ width: `${skill.level}%` }} />
                 </div>
-                <h4 className="text-2xl font-bold mb-4 text-gray-900 hover:text-[var(--primary)] transition">Automated GenAI Report</h4>
-                <p className="text-gray-600 mb-6">AI-powered pipeline turning unstructured data into polished business intelligence reports.</p>
               </div>
-              <a href="https://reportgenerator.in/" target="_blank" rel="noreferrer" className="text-[var(--primary)] font-medium hover:underline">View Project →</a>
-            </div>
+            ))}
+          </div>
 
-            <div className="card p-8 flex flex-col justify-between">
-              <div>
-                <div className="w-full h-48 bg-orange-50/30 rounded-xl mb-6 overflow-hidden border border-orange-100">
-                  <img src="/images/hmcart.png" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="HM Cart" />
+          <h2 className="section-title" style={{ marginTop: '3rem' }}>Tools & Technologies</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {tools.map(tool => (
+              <div key={tool.name} className="skill-item">
+                <div className="skill-name">
+                  <span>{tool.name}</span>
                 </div>
-                <h4 className="text-2xl font-bold mb-4 text-gray-900 hover:text-[var(--primary)] transition">HM Cart Marketplace</h4>
-                <p className="text-gray-600 mb-6">Modern full-stack e-commerce platform with smooth UX and performance.</p>
+                <div className="skill-bar">
+                  <div className="skill-progress" style={{ width: `${tool.level}%` }} />
+                </div>
               </div>
-              <a href="https://kutikantiyashwanth.github.io/hm_cart/" target="_blank" rel="noreferrer" className="text-[var(--primary)] font-medium hover:underline">Live Demo →</a>
-            </div>
+            ))}
           </div>
         </section>
 
-        {/* Education */}
-        <section id="education" className="reveal" ref={addToRefs}>
-          <h2 className="text-sm font-black text-[var(--primary)] uppercase tracking-widest mb-8">04 // Education</h2>
-          <div className="space-y-6">
-            <div className="card p-8 border-l-4 border-[var(--primary)]">
-              <h4 className="text-xl font-bold mb-2 text-gray-900">KITS Huzurabad</h4>
-              <p className="text-gray-500 text-sm mb-2">B.Tech — Artificial Intelligence & Machine Learning</p>
-              <div className="text-4xl font-black text-gray-900">7.94 <span className="text-lg font-normal text-gray-500">CGPA</span></div>
-            </div>
-            <div className="card p-8 border-l-4 border-gray-300">
-              <h4 className="text-xl font-bold mb-2 text-gray-900">Intermediate</h4>
-              <p className="text-gray-500 text-sm mb-2">Shivani Jr College</p>
-              <div className="text-4xl font-black text-gray-900">9.1 <span className="text-lg font-normal text-gray-500">CGPA</span></div>
-            </div>
-          </div>
-        </section>
-
-        {/* Achievements */}
-        <section id="achievements" className="reveal" ref={addToRefs}>
-          <h2 className="text-sm font-black text-[var(--primary)] uppercase tracking-widest mb-8">05 // Achievements</h2>
-          <div className="card p-8">
-            <ul className="space-y-6 text-gray-700">
-              <li className="flex items-start gap-4">
-                <div className="w-3 h-3 mt-2 rounded-full bg-[var(--primary)] shrink-0"></div>
-                <div>
-                  <p className="font-bold text-gray-900">AWS Academy Internship</p>
-                  <p className="text-sm">10-week intensive Data Engineering & Cloud training</p>
+        <section id="portfolio">
+          <h2 className="section-title">My Projects</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+            {projects.map(project => (
+              <a key={project.title} href={project.link} target="_blank" rel="noreferrer" className="project-card">
+                <img src={project.img} alt={project.title} />
+                <div className="project-info">
+                  <h3>{project.title}</h3>
+                  <p>{project.desc}</p>
+                  <div className="project-tags">
+                    {project.tags.map(tag => (
+                      <span key={tag} className="tag">{tag}</span>
+                    ))}
+                  </div>
                 </div>
-              </li>
-              <li className="flex items-start gap-4">
-                <div className="w-3 h-3 mt-2 rounded-full bg-[var(--primary)] shrink-0"></div>
-                <div>
-                  <p className="font-bold text-gray-900">CODESTORM 2026</p>
-                  <p className="text-sm">National hackathon — Developed AI solutions under pressure</p>
-                </div>
-              </li>
-            </ul>
+              </a>
+            ))}
           </div>
         </section>
 
-        {/* Contact */}
-        <section id="contact" className="reveal" ref={addToRefs}>
-          <div className="card p-10 md:p-16 text-center border-t-4 border-[var(--primary)]">
-            <h2 className="text-4xl md:text-5xl font-black mb-10 text-gray-900">
-              Let's create something<br/><span className="text-gradient">meaningful</span> together
-            </h2>
-            <div className="grid md:grid-cols-3 gap-10 max-w-4xl mx-auto">
-              <div>
-                <p className="text-sm font-bold text-[var(--primary)] uppercase tracking-wider mb-3">Phone</p>
-                <a href="tel:9014798201" className="text-2xl font-bold hover:text-[var(--primary)] transition">+91 9014798201</a>
+        <section id="contact">
+          <h2 className="section-title">Contact Me</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>Get In Touch</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>📞</span>
+                  <div>
+                    <p style={{ fontSize: '0.875rem', color: '#a0a0a0' }}>Phone</p>
+                    <a href="tel:9014798201" style={{ fontWeight: '600', color: 'white', textDecoration: 'none' }}>+91 9014798201</a>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>✉️</span>
+                  <div>
+                    <p style={{ fontSize: '0.875rem', color: '#a0a0a0' }}>Email</p>
+                    <a href="mailto:kutikantiyashwanth@gmail.com" style={{ fontWeight: '600', color: 'white', textDecoration: 'none', wordBreak: 'break-all' }}>kutikantiyashwanth@gmail.com</a>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>📍</span>
+                  <div>
+                    <p style={{ fontSize: '0.875rem', color: '#a0a0a0' }}>Location</p>
+                    <p style={{ fontWeight: '600' }}>Warangal, Telangana</p>
+                  </div>
+                </div>
+                <div style={{ marginTop: '1rem' }}>
+                  <a href="/images/yashwanth.pdf" download="Yashwanth_Kutikanti_Resume.pdf" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                    Download Resume
+                  </a>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-bold text-[var(--primary)] uppercase tracking-wider mb-3">Email</p>
-                <a href="mailto:kutikantiyashwanth@gmail.com" className="text-xl font-bold hover:text-[var(--primary)] transition break-all">kutikantiyashwanth@gmail.com</a>
-              </div>
-              <div>
-                <p className="text-sm font-bold text-[var(--primary)] uppercase tracking-wider mb-3">Location</p>
-                <p className="text-2xl font-bold">Hanamakonda, Telangana</p>
-              </div>
+            </div>
+
+            <div className="card">
+              <form>
+                <div className="form-group">
+                  <label>Name</label>
+                  <input type="text" placeholder="Your Name" />
+                </div>
+                <div className="form-group">
+                  <label>Email</label>
+                  <input type="email" placeholder="Your Email" />
+                </div>
+                <div className="form-group">
+                  <label>Message</label>
+                  <textarea placeholder="Your Message"></textarea>
+                </div>
+                <button type="submit" className="btn-primary" style={{ width: '100%' }}>Send Message</button>
+              </form>
             </div>
           </div>
         </section>
-
       </main>
-
-      <footer className="py-12 text-center text-gray-600 text-sm border-t border-orange-100 bg-white/50">
-        Yashwanth Kutikanti • AI & Full Stack Engineer • 2026
-      </footer>
     </>
   );
 }
-
-export default App;
