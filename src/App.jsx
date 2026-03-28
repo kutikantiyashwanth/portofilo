@@ -48,28 +48,28 @@ export default function App() {
     {
       title: 'GovAssist – AI Gov Assistant',
       desc: 'AI-powered platform helping citizens navigate government schemes via conversational AI.',
-      img: '/images/govassist,png.jpeg',
+      img: './images/govassist,png.jpeg',
       link: 'https://govassistant.vercel.app',
       tags: ['React.js', 'LangChain', 'OpenAI'],
     },
     {
       title: 'EAMCET Rank Predictor',
       desc: 'Predict your rank based on subject marks using historical data and trend analysis.',
-      img: '/images/eamcet.png.png',
+      img: './images/eamcet.png.png',
       link: 'https://eamcetrankchecker.vercel.app/',
       tags: ['React.js', 'Supabase', 'ML'],
     },
     {
       title: 'Automated GenAI Reports',
       desc: 'System converting unstructured data into structured business intelligence reports.',
-      img: '/images/genai-report.png.jpeg',
+      img: './images/genai-report.png.jpeg',
       link: 'https://reportgenerator.in/',
       tags: ['Python', 'GenAI APIs'],
     },
     {
       title: 'HM Cart Marketplace',
       desc: 'Responsive full-stack e-commerce platform with modern UI components.',
-      img: '/images/hmcart.png',
+      img: './images/hmcart.png',
       link: 'https://kutikantiyashwanth.github.io/hm_cart/',
       tags: ['React.js', 'JavaScript', 'CSS'],
     },
@@ -165,7 +165,7 @@ export default function App() {
             <a href="#about" className="btn-primary">More About Me</a>
           </div>
           <div className="hero-image">
-            <img src="/images/yash.jpeg" alt="Yashwanth Kutikanti" />
+            <img src="./images/yash.jpeg" alt="Yashwanth Kutikanti" />
           </div>
         </section>
 
@@ -335,7 +335,7 @@ export default function App() {
                   </div>
                 </div>
                 <div style={{ marginTop: '1rem' }}>
-                  <a href="/images/yashwanth.pdf" download="Yashwanth_Kutikanti_Resume.pdf" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <a href="./images/yashwanth.pdf" download="Yashwanth_Kutikanti_Resume.pdf" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                     <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
