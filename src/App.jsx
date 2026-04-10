@@ -228,11 +228,10 @@ export default function App() {
 
           <div className="hero-right">
             <div className="profile-wrap">
-              {/* Hexagon glow rings */}
-              <div className="profile-ring ring-1" />
-              <div className="profile-ring ring-2" />
-              <div className="profile-ring ring-3" />
-              <img src="/images/yash.jpeg" alt="Yashwanth Kutikanti" className="profile-img" style={{mixBlendMode: 'multiply'}} />
+              <div className="profile-glow" />
+              <div className="profile-circle">
+                <img src="/images/yash.jpeg" alt="Yashwanth Kutikanti" className="profile-img" />
+              </div>
               {/* Floating badges */}
               <div className="float-badge badge-tl">
                 <span className="fb-icon">🚀</span>
