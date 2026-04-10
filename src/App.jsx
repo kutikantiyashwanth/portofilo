@@ -164,14 +164,28 @@ export default function App() {
               Passionate about creating AI-powered solutions that simplify real-world problems.
             </p>
             <div className="hero-actions">
-              <a href="#about" className="btn-primary">More About Me</a>
+              <a href="#about" className="btn-primary">Explore My Work</a>
               <a href="/images/yashwanth.pdf" target="_blank" rel="noopener noreferrer" className="btn-outline">
-                View Resume
+                View Resume ↗
               </a>
             </div>
           </div>
           <div className="hero-image">
             <img src="/images/yash.jpeg" alt="Yashwanth Kutikanti" />
+            <div className="hero-stats">
+              <div className="stat-chip">
+                <div className="chip-dot" style={{background:'#7c3aed',boxShadow:'0 0 8px #7c3aed'}}></div>
+                <span>4+ Projects Shipped</span>
+              </div>
+              <div className="stat-chip">
+                <div className="chip-dot" style={{background:'#06b6d4',boxShadow:'0 0 8px #06b6d4'}}></div>
+                <span>AI &amp; Full Stack</span>
+              </div>
+              <div className="stat-chip">
+                <div className="chip-dot" style={{background:'#f59e0b',boxShadow:'0 0 8px #f59e0b'}}></div>
+                <span>7.94 CGPA</span>
+              </div>
+            </div>
           </div>
         </section>
 
