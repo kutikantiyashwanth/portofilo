@@ -232,7 +232,7 @@ export default function App() {
               <div className="profile-ring ring-1" />
               <div className="profile-ring ring-2" />
               <div className="profile-ring ring-3" />
-              <img src="/images/yash.jpeg" alt="Yashwanth Kutikanti" className="profile-img" />
+              <img src="/images/yash.jpeg" alt="Yashwanth Kutikanti" className="profile-img" style={{mixBlendMode: 'multiply'}} />
               {/* Floating badges */}
               <div className="float-badge badge-tl">
                 <span className="fb-icon">🚀</span>
