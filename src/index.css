@@ -223,3 +223,49 @@ section{padding:7rem 5rem;scroll-margin-top:2rem;position:relative;z-index:1;}
 .theme-toggle{position:fixed;top:1.5rem;right:1.5rem;width:44px;height:44px;background:rgba(5,5,8,0.9);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:200;color:white;transition:all 0.3s;}
 .theme-toggle:hover{border-color:var(--c1);box-shadow:0 0 20px rgba(124,58,237,0.4);transform:scale(1.1);}
 [data-theme='light'] .theme-toggle{background:rgba(248,250,252,0.9);color:#0f172a;border-color:rgba(124,58,237,0.2);}
+.form-field{margin-bottom:1.2rem;position:relative;z-index:10;}
+.form-field label{display:block;margin-bottom:0.5rem;font-size:0.82rem;font-weight:600;color:#94a3b8;letter-spacing:0.05em;}
+.form-field input,.form-field textarea{width:100%;padding:0.9rem 1.1rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:12px;color:white;font-family:'Inter',sans-serif;font-size:0.9rem;transition:all 0.3s;position:relative;z-index:10;pointer-events:all;-webkit-appearance:none;cursor:text;}
+.form-field input:focus,.form-field textarea:focus{outline:none;border-color:var(--c1);background:rgba(124,58,237,0.08);box-shadow:0 0 0 3px rgba(124,58,237,0.15);}
+.form-field input::placeholder,.form-field textarea::placeholder{color:#666;}
+.form-field textarea{resize:vertical;min-height:130px;}
+.contact-form-wrap{position:relative;z-index:10;}
+.contact-form{position:relative;z-index:10;}
+[data-theme='light'] .form-field label{color:#475569;}
+[data-theme='light'] .form-field input,[data-theme='light'] .form-field textarea{background:#ffffff;border:1.5px solid #cbd5e1;color:#0f172a;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+[data-theme='light'] .form-field input:focus,[data-theme='light'] .form-field textarea:focus{border-color:var(--c1);background:#faf5ff;box-shadow:0 0 0 3px rgba(124,58,237,0.12);}
+[data-theme='light'] .form-field input::placeholder,[data-theme='light'] .form-field textarea::placeholder{color:#94a3b8;}
+[data-theme='light'] body{background:linear-gradient(135deg,#f0f4ff 0%,#faf5ff 50%,#f0fdff 100%);}
+[data-theme='light'] .section-title{color:#0f172a;}
+[data-theme='light'] .hero-heading{color:#0f172a;}
+[data-theme='light'] .hero-role{color:#475569;}
+[data-theme='light'] .hero-desc{color:#475569;}
+[data-theme='light'] .section-sub{color:#475569;}
+[data-theme='light'] .proj-title{color:#0f172a;}
+[data-theme='light'] .proj-desc{color:#475569;}
+[data-theme='light'] .about-bio-text h3{color:#0f172a;}
+[data-theme='light'] .about-bio-text p{color:#475569;}
+[data-theme='light'] .p-card h3{color:#0f172a;}
+[data-theme='light'] .p-card p{color:#475569;}
+[data-theme='light'] .edu-item h4{color:#0f172a;}
+[data-theme='light'] .edu-item p{color:#475569;}
+[data-theme='light'] .ach-item h4{color:#0f172a;}
+[data-theme='light'] .ach-item p{color:#475569;}
+[data-theme='light'] .skill-meta{color:#334155;}
+[data-theme='light'] .contact-value{color:#0f172a;}
+[data-theme='light'] .contact-label{color:#64748b;}
+[data-theme='light'] .form-title{color:#0f172a;}
+[data-theme='light'] .footer-copy{color:#64748b;}
+[data-theme='light'] .footer-links a{color:#475569;}
+[data-theme='light'] .sidebar-logo{background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+[data-theme='light'] .nav-item{color:#94a3b8;}
+[data-theme='light'] .hero-badge{background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.2);color:#7c3aed;}
+[data-theme='light'] .about-tags span{background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.15);color:#7c3aed;}
+[data-theme='light'] .tech-pill{background:rgba(124,58,237,0.06);border-color:rgba(124,58,237,0.15);color:#7c3aed;}
+[data-theme='light'] .section-eyebrow{color:var(--c1);}
+[data-theme='light'] .skills-group-title{color:#0f172a;}
+[data-theme='light'] .form-success h3{color:#0f172a;}
+[data-theme='light'] .form-success p{color:#475569;}
+.contact-form-wrap.glass-card{overflow:visible;}
+.contact-form-wrap.glass-card::after{pointer-events:none;}
+.contact-form-wrap.glass-card::before{pointer-events:none;}
