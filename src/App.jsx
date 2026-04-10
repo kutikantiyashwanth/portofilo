@@ -5,14 +5,19 @@ export default function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [formStatus, setFormStatus] = useState('idle'); // idle | sending | success | error
+  const [formStatus, setFormStatus] = useState('idle');
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [darkMode, setDarkMode] = useState(true);
   const mainRef = useRef(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2800);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
 
   useEffect(() => {
     const handleMouse = (e) => setMousePos({ x: e.clientX, y: e.clientY });
@@ -30,24 +35,23 @@ export default function App() {
     return () => observer.disconnect();
   }, [loading]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
     setFormStatus('sending');
-    await new Promise(r => setTimeout(r, 1500));
-    try {
+    setTimeout(() => {
       const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
       const body = encodeURIComponent(
         `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
       );
-      window.open(`mailto:kutikantiyashwanth@gmail.com?subject=${subject}&body=${body}`, '_blank');
+      const mailtoLink = `mailto:kutikantiyashwanth@gmail.com?subject=${subject}&body=${body}`;
+      const a = document.createElement('a');
+      a.href = mailtoLink;
+      a.click();
       setFormStatus('success');
       setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setFormStatus('idle'), 5000);
-    } catch {
-      setFormStatus('error');
-      setTimeout(() => setFormStatus('idle'), 4000);
-    }
+      setTimeout(() => setFormStatus('idle'), 6000);
+    }, 1200);
   };
 
   const skills = [
@@ -142,6 +146,19 @@ export default function App() {
         <span className={`hamburger ${menuOpen ? 'open' : ''}`}>
           <span /><span /><span />
         </span>
+      </button>
+
+      {/* Dark/Light mode toggle */}
+      <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)} aria-label="Toggle theme">
+        {darkMode ? (
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/>
+          </svg>
+        ) : (
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/>
+          </svg>
+        )}
       </button>
 
       {/* Sidebar */}
