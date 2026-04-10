@@ -1,390 +1,542 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  const [themeColor, setThemeColor] = useState('#ff6b35');
-  const [themeSwitcherOpen, setThemeSwitcherOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formStatus, setFormStatus] = useState('idle'); // idle | sending | success | error
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const mainRef = useRef(null);
 
   useEffect(() => {
-    // Hide loader after 2.5 seconds
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2500);
+    const timer = setTimeout(() => setLoading(false), 2800);
     return () => clearTimeout(timer);
   }, []);
 
-  const colors = [
-    { name: 'orange', value: '#ff6b35' },
-    { name: 'blue', value: '#6b4ae2ff' },
-    { name: 'green', value: '#2ecc71' },
-    { name: 'purple', value: '#9b59b6' },
-    { name: 'pink', value: '#e91e63' },
-  ];
+  useEffect(() => {
+    const handleMouse = (e) => setMousePos({ x: e.clientX, y: e.clientY });
+    window.addEventListener('mousemove', handleMouse);
+    return () => window.removeEventListener('mousemove', handleMouse);
+  }, []);
 
   useEffect(() => {
-    document.documentElement.style.setProperty('--primary', themeColor);
-  }, [themeColor]);
+    const sections = document.querySelectorAll('section[id]');
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach(e => e.isIntersecting && setActiveSection(e.target.id)),
+      { threshold: 0.3 }
+    );
+    sections.forEach(s => observer.observe(s));
+    return () => observer.disconnect();
+  }, [loading]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) return;
+    setFormStatus('sending');
+    await new Promise(r => setTimeout(r, 1500));
+    try {
+      const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
+      const body = encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      );
+      window.open(`mailto:kutikantiyashwanth@gmail.com?subject=${subject}&body=${body}`, '_blank');
+      setFormStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => setFormStatus('idle'), 5000);
+    } catch {
+      setFormStatus('error');
+      setTimeout(() => setFormStatus('idle'), 4000);
+    }
+  };
 
   const skills = [
-    { name: 'Python', level: 88 },
-    { name: 'JavaScript', level: 85 },
-    { name: 'Java', level: 78 },
-    { name: 'React / Next.js', level: 90 },
-    { name: 'LangChain / OpenAI', level: 86 },
-    { name: 'Node.js', level: 82 },
+    { name: 'React / Next.js', level: 90, color: '#61dafb' },
+    { name: 'Python', level: 88, color: '#3776ab' },
+    { name: 'LangChain / OpenAI', level: 86, color: '#10a37f' },
+    { name: 'JavaScript', level: 85, color: '#f7df1e' },
+    { name: 'Node.js', level: 82, color: '#68a063' },
+    { name: 'Java', level: 78, color: '#f89820' },
   ];
 
   const tools = [
-    { name: 'AWS / Docker', level: 76 },
-    { name: 'MongoDB', level: 80 },
-    { name: 'PostgreSQL', level: 80 },
-    { name: 'Git / GitHub', level: 85 },
-    { name: 'Tailwind CSS', level: 92 },
+    { name: 'Tailwind CSS', level: 92, color: '#38bdf8' },
+    { name: 'Git / GitHub', level: 85, color: '#f05032' },
+    { name: 'MongoDB', level: 80, color: '#47a248' },
+    { name: 'PostgreSQL', level: 80, color: '#336791' },
+    { name: 'AWS / Docker', level: 76, color: '#ff9900' },
   ];
 
   const projects = [
     {
-      title: 'GovAssist – AI Gov Assistant',
-      desc: 'AI-powered platform helping citizens navigate government schemes via conversational AI.',
+      title: 'GovAssist',
+      subtitle: 'AI Government Assistant',
+      desc: 'AI-powered platform helping citizens navigate government schemes via conversational AI. Built with LangChain and OpenAI.',
       img: '/images/govassist,png.jpeg',
       link: 'https://govassistant.vercel.app',
       tags: ['React.js', 'LangChain', 'OpenAI'],
+      accent: '#7c3aed',
     },
     {
-      title: 'EAMCET Rank Predictor',
-      desc: 'Predict your rank based on subject marks using historical data and trend analysis.',
+      title: 'EAMCET Predictor',
+      subtitle: 'ML Rank Prediction Engine',
+      desc: 'Predict your rank based on subject marks using historical data and ML trend analysis.',
       img: '/images/eamcet.png.png',
       link: 'https://eamcetrankchecker.vercel.app/',
       tags: ['React.js', 'Supabase', 'ML'],
+      accent: '#06b6d4',
     },
     {
-      title: 'Automated GenAI Reports',
-      desc: 'System converting unstructured data into structured business intelligence reports.',
+      title: 'GenAI Reports',
+      subtitle: 'Automated BI Reports',
+      desc: 'System converting unstructured data into structured business intelligence reports using GenAI.',
       img: '/images/genai-report.png.jpeg',
       link: 'https://reportgenerator.in/',
       tags: ['Python', 'GenAI APIs'],
+      accent: '#f59e0b',
     },
     {
-      title: 'HM Cart Marketplace',
-      desc: 'Responsive full-stack e-commerce platform with modern UI components.',
+      title: 'HM Cart',
+      subtitle: 'E-Commerce Marketplace',
+      desc: 'Responsive full-stack e-commerce platform with modern UI, cart management and checkout.',
       img: '/images/hmcart.png',
       link: 'https://kutikantiyashwanth.github.io/hm_cart/',
       tags: ['React.js', 'JavaScript', 'CSS'],
+      accent: '#10b981',
     },
   ];
 
-  return (
-    <>
-      {/* Loading Screen */}
-      {loading && (
-        <div className="loader-wrapper">
-          <div className="loader-content">
-            <h1 className="loader-name">Yashwanth Kutikanti</h1>
-            <div className="loader-bar">
-              <div className="loader-progress"></div>
-            </div>
-            <p className="loader-text">Loading Portfolio...</p>
+  if (loading) {
+    return (
+      <div className="loader-screen">
+        <div className="loader-inner">
+          <div className="loader-logo">YK<span className="loader-dot">.</span></div>
+          <div className="loader-name">Yashwanth Kutikanti</div>
+          <div className="loader-bar-wrap">
+            <div className="loader-bar-fill" />
           </div>
+          <div className="loader-sub">Crafting your experience...</div>
         </div>
-      )}
+      </div>
+    );
+  }
 
-      <button className="mobile-menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
-        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
-          <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        </svg>
+  return (
+    <div className="app-root" ref={mainRef}>
+      {/* Cursor glow */}
+      <div
+        className="cursor-glow"
+        style={{ left: mousePos.x - 200, top: mousePos.y - 200 }}
+      />
+
+      {/* Background */}
+      <div className="bg-layer">
+        <div className="bg-grid" />
+        <div className="bg-orb orb-1" />
+        <div className="bg-orb orb-2" />
+        <div className="bg-orb orb-3" />
+      </div>
+
+      {/* Mobile menu button */}
+      <button className="mobile-menu-btn" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
+        <span className={`hamburger ${menuOpen ? 'open' : ''}`}>
+          <span /><span /><span />
+        </span>
       </button>
 
+      {/* Sidebar */}
       <aside className={`sidebar ${menuOpen ? 'open' : ''}`}>
-        <div className="logo">YK</div>
-        <nav>
-          <a href="#home" className={`nav-link ${activeSection === 'home' ? 'active' : ''}`} onClick={() => { setActiveSection('home'); setMenuOpen(false); }}>
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-            </svg>
-            Home
-          </a>
-          <a href="#about" className={`nav-link ${activeSection === 'about' ? 'active' : ''}`} onClick={() => { setActiveSection('about'); setMenuOpen(false); }}>
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-            </svg>
-            About
-          </a>
-          <a href="#skills" className={`nav-link ${activeSection === 'skills' ? 'active' : ''}`} onClick={() => { setActiveSection('skills'); setMenuOpen(false); }}>
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-            </svg>
-            Skills
-          </a>
-          <a href="#portfolio" className={`nav-link ${activeSection === 'portfolio' ? 'active' : ''}`} onClick={() => { setActiveSection('portfolio'); setMenuOpen(false); }}>
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
-            </svg>
-            Projects
-          </a>
-          <a href="#contact" className={`nav-link ${activeSection === 'contact' ? 'active' : ''}`} onClick={() => { setActiveSection('contact'); setMenuOpen(false); }}>
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-            </svg>
-            Contact
-          </a>
+        <div className="sidebar-logo">YK</div>
+        <nav className="sidebar-nav">
+          {[
+            { id: 'home', label: 'Home', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+            { id: 'about', label: 'About', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
+            { id: 'skills', label: 'Skills', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
+            { id: 'portfolio', label: 'Projects', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z' },
+            { id: 'contact', label: 'Contact', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+          ].map(({ id, label, icon }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              title={label}
+              className={`nav-item ${activeSection === id ? 'active' : ''}`}
+              onClick={() => setMenuOpen(false)}
+            >
+              <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
+              </svg>
+              <span className="nav-label">{label}</span>
+            </a>
+          ))}
         </nav>
+        <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="sidebar-resume">
+          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span>Resume</span>
+        </a>
       </aside>
 
-      <div className="settings-icon" onClick={() => setThemeSwitcherOpen(!themeSwitcherOpen)}>
-        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-        </svg>
-      </div>
+      <main className="main-wrap">
 
-      <div className={`theme-switcher ${themeSwitcherOpen ? '' : 'hidden'}`} style={{ opacity: themeSwitcherOpen ? 1 : 0, pointerEvents: themeSwitcherOpen ? 'auto' : 'none', transition: 'opacity 0.3s' }}>
-        <h4>Theme Colors</h4>
-        <div className="color-options">
-          {colors.map(color => (
-            <button
-              key={color.name}
-              className={`color-btn ${themeColor === color.value ? 'active' : ''}`}
-              style={{ background: color.value }}
-              onClick={() => setThemeColor(color.value)}
-            />
-          ))}
-        </div>
-      </div>
-
-      <main className="main-content">
-        <section id="home" className="hero-section">
-          <div className="hero-text">
-            <div className="hero-badge"><span></span> Available for opportunities</div>
-            <h1>Hello, I'm <span>Yashwanth Kutikanti</span></h1>
-            <h2>AI &amp; <span>Full Stack</span> Developer</h2>
-            <p>
-              Building intelligent, scalable applications using React, Python, Java and modern AI frameworks.
-              Passionate about creating AI-powered solutions that simplify real-world problems.
+        {/* ── HERO ── */}
+        <section id="home" className="hero">
+          <div className="hero-left">
+            <div className="hero-badge">
+              <span className="badge-dot" />
+              Available for opportunities
+            </div>
+            <h1 className="hero-heading">
+              Hi, I'm<br />
+              <span className="hero-name-grad">Yashwanth</span><br />
+              <span className="hero-name-grad">Kutikanti</span>
+            </h1>
+            <p className="hero-role">AI &amp; Full Stack Developer</p>
+            <p className="hero-desc">
+              I build intelligent, scalable digital products — from modern web apps to
+              AI-powered systems that solve real-world problems with clean code and great UX.
             </p>
-            <div className="hero-actions">
-              <a href="#about" className="btn-primary">Explore My Work</a>
-              <a href="/images/yashwanth.pdf" target="_blank" rel="noopener noreferrer" className="btn-outline">
-                View Resume ↗
+            <div className="hero-btns">
+              <a href="#portfolio" className="btn-primary">View My Work</a>
+              <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="btn-ghost">
+                Resume ↗
               </a>
             </div>
+            <div className="hero-tech-row">
+              {['React', 'Python', 'Node.js', 'AWS', 'LangChain', 'OpenAI'].map(t => (
+                <span key={t} className="tech-pill">{t}</span>
+              ))}
+            </div>
           </div>
-          <div className="hero-image">
-            <img src="/images/yash.jpeg" alt="Yashwanth Kutikanti" />
-            <div className="hero-stats">
-              <div className="stat-chip">
-                <div className="chip-dot" style={{background:'#7c3aed',boxShadow:'0 0 8px #7c3aed'}}></div>
-                <span>4+ Projects Shipped</span>
+
+          <div className="hero-right">
+            <div className="profile-wrap">
+              {/* Hexagon glow rings */}
+              <div className="profile-ring ring-1" />
+              <div className="profile-ring ring-2" />
+              <div className="profile-ring ring-3" />
+              <img src="/images/yash.jpeg" alt="Yashwanth Kutikanti" className="profile-img" />
+              {/* Floating badges */}
+              <div className="float-badge badge-tl">
+                <span className="fb-icon">🚀</span>
+                <span>4+ Projects</span>
               </div>
-              <div className="stat-chip">
-                <div className="chip-dot" style={{background:'#06b6d4',boxShadow:'0 0 8px #06b6d4'}}></div>
-                <span>AI &amp; Full Stack</span>
-              </div>
-              <div className="stat-chip">
-                <div className="chip-dot" style={{background:'#f59e0b',boxShadow:'0 0 8px #f59e0b'}}></div>
+              <div className="float-badge badge-br">
+                <span className="fb-icon">⭐</span>
                 <span>7.94 CGPA</span>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="about">
-          <h2 className="section-title">About Me</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-            <div className="card">
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>Education</h3>
-              <div className="timeline-item">
-                <h4 style={{ fontSize: '1.25rem', fontWeight: '600' }}>KITS Huzurabad</h4>
-                <p style={{ color: '#a0a0a0', fontSize: '0.875rem', marginBottom: '0.5rem' }}>B.Tech — AI & Machine Learning</p>
-                <p style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary)' }}>7.94 CGPA</p>
-                <p style={{ fontSize: '0.875rem', color: '#666', marginTop: '0.25rem' }}>2022 – 2027</p>
-              </div>
-              <div className="timeline-item">
-                <h4 style={{ fontSize: '1.25rem', fontWeight: '600' }}>Shivani Jr College</h4>
-                <p style={{ color: '#a0a0a0', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Intermediate (MPC)</p>
-                <p style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary)' }}>9.1 CGPA</p>
-                <p style={{ fontSize: '0.875rem', color: '#666', marginTop: '0.25rem' }}>2020 – 2022</p>
+              <div className="float-badge badge-tr">
+                <span className="fb-icon">🤖</span>
+                <span>AI Dev</span>
               </div>
             </div>
+          </div>
+        </section>
 
-            <div className="card">
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>Achievements</h3>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1.5rem' }}>
-                  <span style={{ fontSize: '1.5rem' }}>🔐</span>
+        {/* ── ABOUT ── */}
+        <section id="about" className="about-section">
+          <div className="section-header">
+            <span className="section-eyebrow">// about me</span>
+            <h2 className="section-title">Who I Am</h2>
+          </div>
+
+          <div className="about-grid">
+            <div className="about-bio-card glass-card">
+              <div className="about-avatar-mini">
+                <img src="/images/yash.jpeg" alt="Yashwanth" />
+                <div className="avatar-status">
+                  <span className="status-dot" />
+                  Open to work
+                </div>
+              </div>
+              <div className="about-bio-text">
+                <h3>Yashwanth Kutikanti</h3>
+                <p className="about-role-tag">AI &amp; Full Stack Developer</p>
+                <p>
+                  I'm a passionate developer pursuing B.Tech in AI &amp; Machine Learning at KITS Huzurabad.
+                  I specialize in building end-to-end intelligent applications — from sleek React frontends
+                  to powerful Python AI backends.
+                </p>
+                <p>
+                  My mission is to bridge the gap between complex AI technology and real-world usability,
+                  creating products that are both powerful and intuitive.
+                </p>
+                <div className="about-tags">
+                  <span>Problem Solver</span>
+                  <span>AI Enthusiast</span>
+                  <span>Clean Code Advocate</span>
+                  <span>Open Source</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="about-cards-col">
+              <div className="glass-card edu-card">
+                <div className="card-icon-header">
+                  <span className="card-icon">🎓</span>
+                  <h3>Education</h3>
+                </div>
+                <div className="edu-item">
+                  <div className="edu-dot" />
                   <div>
-                    <h4 style={{ fontWeight: '600', marginBottom: '0.25rem' }}>Ethical Hacking Virtual Internship</h4>
-                    <p style={{ fontSize: '0.875rem', color: '#a0a0a0' }}>EduSkills / AICTE — Oct–Dec 2025</p>
+                    <h4>KITS Huzurabad</h4>
+                    <p>B.Tech — AI &amp; Machine Learning</p>
+                    <div className="edu-meta">
+                      <span className="edu-grade">7.94 CGPA</span>
+                      <span>2022 – 2027</span>
+                    </div>
                   </div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1.5rem' }}>
-                  <span style={{ fontSize: '1.5rem' }}>☁️</span>
+                </div>
+                <div className="edu-item">
+                  <div className="edu-dot" />
                   <div>
-                    <h4 style={{ fontWeight: '600', marginBottom: '0.25rem' }}>AWS Academy Data Engineering</h4>
-                    <p style={{ fontSize: '0.875rem', color: '#a0a0a0' }}>10-week intensive training</p>
+                    <h4>Shivani Jr College</h4>
+                    <p>Intermediate (MPC)</p>
+                    <div className="edu-meta">
+                      <span className="edu-grade">9.1 CGPA</span>
+                      <span>2020 – 2022</span>
+                    </div>
                   </div>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-                  <span style={{ fontSize: '1.5rem' }}>🏆</span>
-                  <div>
-                    <h4 style={{ fontWeight: '600', marginBottom: '0.25rem' }}>CODESTORM 2026</h4>
-                    <p style={{ fontSize: '0.875rem', color: '#a0a0a0' }}>National Hackathon Participant</p>
+                </div>
+              </div>
+
+              <div className="glass-card ach-card">
+                <div className="card-icon-header">
+                  <span className="card-icon">🏆</span>
+                  <h3>Achievements</h3>
+                </div>
+                {[
+                  { icon: '🔐', title: 'Ethical Hacking Internship', sub: 'EduSkills / AICTE — Oct–Dec 2025' },
+                  { icon: '☁️', title: 'AWS Academy Data Engineering', sub: '10-week intensive program' },
+                  { icon: '⚡', title: 'CODESTORM 2026', sub: 'National Hackathon Participant' },
+                ].map((a, i) => (
+                  <div key={i} className="ach-item">
+                    <span className="ach-icon">{a.icon}</span>
+                    <div>
+                      <h4>{a.title}</h4>
+                      <p>{a.sub}</p>
+                    </div>
                   </div>
-                </li>
-              </ul>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        <section id="process">
-          <h2 className="section-title">How I Work</h2>
-          <p style={{ color: '#a0a0a0', fontSize: '1.1rem', marginBottom: '3rem', maxWidth: '800px' }}>
-            From idea to shipped product — here's my proven process for turning concepts into reality
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
-            <div className="process-card">
-              <div className="process-number">01</div>
-              <div className="process-icon">💡</div>
-              <h3>Ideate</h3>
-              <p>Identify problems, brainstorm solutions, and validate ideas with research and user feedback.</p>
-            </div>
-            <div className="process-card">
-              <div className="process-number">02</div>
-              <div className="process-icon">🎨</div>
-              <h3>Design</h3>
-              <p>Create wireframes, design UI/UX, and plan the architecture for scalable implementation.</p>
-            </div>
-            <div className="process-card">
-              <div className="process-number">03</div>
-              <div className="process-icon">⚙️</div>
-              <h3>Develop</h3>
-              <p>Build with modern tech stack, write clean code, and integrate AI/ML capabilities.</p>
-            </div>
-            <div className="process-card">
-              <div className="process-number">04</div>
-              <div className="process-icon">🧪</div>
-              <h3>Test</h3>
-              <p>Rigorous testing, debugging, performance optimization, and security checks.</p>
-            </div>
-            <div className="process-card">
-              <div className="process-number">05</div>
-              <div className="process-icon">🚀</div>
-              <h3>Ship</h3>
-              <p>Deploy to production, monitor performance, and iterate based on real-world usage.</p>
-            </div>
+        {/* ── PROCESS ── */}
+        <section id="process" className="process-section">
+          <div className="section-header">
+            <span className="section-eyebrow">// workflow</span>
+            <h2 className="section-title">How I Turn Ideas Into Shipped Work</h2>
           </div>
-        </section>
-
-        <section id="skills">
-          <h2 className="section-title">My Skills</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-            {skills.map(skill => (
-              <div key={skill.name} className="skill-item">
-                <div className="skill-name">
-                  <span>{skill.name}</span>
-                  <span>{skill.level}%</span>
-                </div>
-                <div className="skill-bar">
-                  <div className="skill-progress" style={{ width: `${skill.level}%` }} />
-                </div>
+          <div className="process-grid">
+            {[
+              { n: '01', icon: '💡', title: 'Ideate', desc: 'Identify problems, brainstorm solutions, and validate ideas with research and user feedback.' },
+              { n: '02', icon: '🎯', title: 'Plan', desc: 'Define architecture, wireframes, and roadmap for scalable and maintainable implementation.' },
+              { n: '03', icon: '⚙️', title: 'Build', desc: 'Write clean, maintainable code using modern stacks with AI/ML capabilities integrated.' },
+              { n: '04', icon: '🧪', title: 'Test', desc: 'Rigorous testing, debugging, performance tuning, and security hardening.' },
+              { n: '05', icon: '🚀', title: 'Ship', desc: 'Deploy to production, monitor metrics, and iterate based on real-world usage data.' },
+            ].map((s, i) => (
+              <div key={i} className="p-card glass-card" style={{ animationDelay: `${i * 0.1}s` }}>
+                <div className="p-num">{s.n}</div>
+                <div className="p-emoji">{s.icon}</div>
+                <h3>{s.title}</h3>
+                <p>{s.desc}</p>
               </div>
             ))}
           </div>
+        </section>
 
-          <h2 className="section-title" style={{ marginTop: '3rem' }}>Tools & Technologies</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-            {tools.map(tool => (
-              <div key={tool.name} className="skill-item">
-                <div className="skill-name">
-                  <span>{tool.name}</span>
+        {/* ── SKILLS ── */}
+        <section id="skills" className="skills-section">
+          <div className="section-header">
+            <span className="section-eyebrow">// expertise</span>
+            <h2 className="section-title">Skills &amp; Tools</h2>
+          </div>
+          <div className="skills-grid">
+            <div className="glass-card">
+              <h3 className="skills-group-title">
+                <span className="skills-group-dot" style={{ background: '#7c3aed' }} />
+                Core Skills
+              </h3>
+              {skills.map(s => (
+                <div key={s.name} className="skill-row">
+                  <div className="skill-meta">
+                    <span>{s.name}</span>
+                    <span className="skill-pct">{s.level}%</span>
+                  </div>
+                  <div className="skill-track">
+                    <div
+                      className="skill-fill"
+                      style={{ width: `${s.level}%`, background: `linear-gradient(90deg, ${s.color}, #7c3aed)` }}
+                    />
+                  </div>
                 </div>
-                <div className="skill-bar">
-                  <div className="skill-progress" style={{ width: `${tool.level}%` }} />
+              ))}
+            </div>
+            <div className="glass-card">
+              <h3 className="skills-group-title">
+                <span className="skills-group-dot" style={{ background: '#06b6d4' }} />
+                Tools &amp; Technologies
+              </h3>
+              {tools.map(t => (
+                <div key={t.name} className="skill-row">
+                  <div className="skill-meta">
+                    <span>{t.name}</span>
+                    <span className="skill-pct">{t.level}%</span>
+                  </div>
+                  <div className="skill-track">
+                    <div
+                      className="skill-fill"
+                      style={{ width: `${t.level}%`, background: `linear-gradient(90deg, ${t.color}, #06b6d4)` }}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 
-        <section id="portfolio">
-          <h2 className="section-title">My Projects</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
-            {projects.map(project => (
-              <a key={project.title} href={project.link} target="_blank" rel="noreferrer" className="project-card">
-                <img src={project.img} alt={project.title} />
-                <div className="project-info">
-                  <h3>{project.title}</h3>
-                  <p>{project.desc}</p>
-                  <div className="project-tags">
-                    {project.tags.map(tag => (
-                      <span key={tag} className="tag">{tag}</span>
+        {/* ── PROJECTS ── */}
+        <section id="portfolio" className="projects-section">
+          <div className="section-header">
+            <span className="section-eyebrow">// featured work</span>
+            <h2 className="section-title">Selected Projects</h2>
+          </div>
+          <div className="projects-grid">
+            {projects.map((p, i) => (
+              <div key={i} className="proj-card glass-card">
+                <div className="proj-img-wrap">
+                  <img src={p.img} alt={p.title} />
+                  <div className="proj-overlay">
+                    <a href={p.link} target="_blank" rel="noreferrer" className="proj-live-btn">
+                      View Live ↗
+                    </a>
+                  </div>
+                  <div className="proj-accent-bar" style={{ background: p.accent }} />
+                </div>
+                <div className="proj-body">
+                  <div className="proj-category" style={{ color: p.accent }}>{p.subtitle}</div>
+                  <h3 className="proj-title">{p.title}</h3>
+                  <p className="proj-desc">{p.desc}</p>
+                  <div className="proj-tags">
+                    {p.tags.map(t => (
+                      <span key={t} className="proj-tag" style={{ borderColor: `${p.accent}40`, color: p.accent, background: `${p.accent}12` }}>{t}</span>
                     ))}
                   </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        <section id="contact">
-          <h2 className="section-title">Contact Me</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-            <div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>Get In Touch</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <span style={{ fontSize: '1.5rem' }}>📞</span>
-                  <div>
-                    <p style={{ fontSize: '0.875rem', color: '#a0a0a0' }}>Phone</p>
-                    <a href="tel:9014798201" style={{ fontWeight: '600', color: 'white', textDecoration: 'none' }}>+91 9014798201</a>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <span style={{ fontSize: '1.5rem' }}>✉️</span>
-                  <div>
-                    <p style={{ fontSize: '0.875rem', color: '#a0a0a0' }}>Email</p>
-                    <a href="mailto:kutikantiyashwanth@gmail.com" style={{ fontWeight: '600', color: 'white', textDecoration: 'none', wordBreak: 'break-all' }}>kutikantiyashwanth@gmail.com</a>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <span style={{ fontSize: '1.5rem' }}>📍</span>
-                  <div>
-                    <p style={{ fontSize: '0.875rem', color: '#a0a0a0' }}>Location</p>
-                    <p style={{ fontWeight: '600' }}>Warangal, Telangana</p>
-                  </div>
-                </div>
-                <div style={{ marginTop: '1rem' }}>
-                  <a href="/images/yashwanth.pdf" download="Yashwanth_Kutikanti_Resume.pdf" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
-                    Download Resume
+                  <a href={p.link} target="_blank" rel="noreferrer" className="proj-cta" style={{ color: p.accent }}>
+                    View Project →
                   </a>
                 </div>
               </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── CONTACT ── */}
+        <section id="contact" className="contact-section">
+          <div className="section-header">
+            <span className="section-eyebrow">// get in touch</span>
+            <h2 className="section-title">Let's Build Together</h2>
+            <p className="section-sub">Have a project in mind? Let's talk and make it happen.</p>
+          </div>
+
+          <div className="contact-grid">
+            <div className="contact-info">
+              {[
+                { icon: '✉️', label: 'Email', value: 'kutikantiyashwanth@gmail.com', href: 'mailto:kutikantiyashwanth@gmail.com' },
+                { icon: '📱', label: 'Phone', value: '+91 9014798201', href: 'tel:+919014798201' },
+                { icon: '📍', label: 'Location', value: 'Warangal, Telangana, India', href: null },
+              ].map((c, i) => (
+                <a key={i} href={c.href || '#'} className="contact-card glass-card" style={{ textDecoration: 'none' }}>
+                  <div className="contact-icon-wrap">{c.icon}</div>
+                  <div>
+                    <div className="contact-label">{c.label}</div>
+                    <div className="contact-value">{c.value}</div>
+                  </div>
+                </a>
+              ))}
+              <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="btn-primary resume-dl-btn">
+                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                View / Download Resume
+              </a>
             </div>
 
-            <div className="card">
-              <form>
-                <div className="form-group">
-                  <label>Name</label>
-                  <input type="text" placeholder="Your Name" />
+            <div className="contact-form-wrap glass-card">
+              {formStatus === 'success' ? (
+                <div className="form-success">
+                  <div className="success-icon">✅</div>
+                  <h3>Message Sent!</h3>
+                  <p>Your email client opened with the message. Please hit send to reach me directly at <strong>kutikantiyashwanth@gmail.com</strong></p>
+                  <button className="btn-primary" onClick={() => setFormStatus('idle')}>Send Another</button>
                 </div>
-                <div className="form-group">
-                  <label>Email</label>
-                  <input type="email" placeholder="Your Email" />
-                </div>
-                <div className="form-group">
-                  <label>Message</label>
-                  <textarea placeholder="Your Message"></textarea>
-                </div>
-                <button type="submit" className="btn-primary" style={{ width: '100%' }}>Send Message</button>
-              </form>
+              ) : (
+                <form onSubmit={handleSubmit} className="contact-form">
+                  <h3 className="form-title">Send a Message</h3>
+                  <div className="form-row">
+                    <div className="form-field">
+                      <label>Your Name</label>
+                      <input
+                        type="text"
+                        placeholder="John Doe"
+                        value={formData.name}
+                        onChange={e => setFormData({ ...formData, name: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="form-field">
+                      <label>Your Email</label>
+                      <input
+                        type="email"
+                        placeholder="john@example.com"
+                        value={formData.email}
+                        onChange={e => setFormData({ ...formData, email: e.target.value })}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="form-field">
+                    <label>Message</label>
+                    <textarea
+                      placeholder="Tell me about your project..."
+                      rows="5"
+                      value={formData.message}
+                      onChange={e => setFormData({ ...formData, message: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <button type="submit" className="btn-primary form-submit" disabled={formStatus === 'sending'}>
+                    {formStatus === 'sending' ? (
+                      <><span className="spinner" /> Sending...</>
+                    ) : (
+                      <>Send Message <span>→</span></>
+                    )}
+                  </button>
+                  {formStatus === 'error' && (
+                    <p className="form-error">Something went wrong. Please email directly.</p>
+                  )}
+                </form>
+              )}
             </div>
           </div>
         </section>
+
+        {/* ── FOOTER ── */}
+        <footer className="footer">
+          <div className="footer-inner">
+            <div className="footer-brand">Yashwanth Kutikanti</div>
+            <div className="footer-links">
+              <a href="https://github.com/kutikantiyashwanth" target="_blank" rel="noreferrer">GitHub</a>
+              <a href="https://linkedin.com/in/kutikanti-yashwanth-6bb1bb351" target="_blank" rel="noreferrer">LinkedIn</a>
+              <a href="mailto:kutikantiyashwanth@gmail.com">Email</a>
+            </div>
+          </div>
+          <div className="footer-copy">Built with React &amp; passion — {new Date().getFullYear()}</div>
+        </footer>
+
       </main>
-    </>
+    </div>
   );
 }
