@@ -16,8 +16,8 @@ function useReveal() {
 }
 
 export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState('idle');
   const [darkMode, setDarkMode] = useState(true);
@@ -45,6 +45,7 @@ export default function App() {
   const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setMenuOpen(false);
   };
 
   useReveal();
@@ -115,7 +116,7 @@ export default function App() {
       <header className="topnav">
         <div className="topnav-inner">
           <div className="topnav-logo">YK<span className="logo-dot">.</span></div>
-          <nav className="topnav-links">
+          <nav className={`topnav-links ${menuOpen ? 'mobile-open' : ''}`}>
             {[
               { id: 'home', label: 'Home' },
               { id: 'about', label: 'About' },
@@ -142,9 +143,16 @@ export default function App() {
               )}
             </button>
             <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="topnav-resume">Resume</a>
+            <button className="hamburger-btn" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
+              <span className={`ham ${menuOpen ? 'open' : ''}`}>
+                <span /><span /><span />
+              </span>
+            </button>
           </div>
         </div>
       </header>
+      {/* Mobile menu overlay */}
+      {menuOpen && <div className="mobile-overlay" onClick={() => setMenuOpen(false)} />}
 
       <main className="main-wrap">
 
