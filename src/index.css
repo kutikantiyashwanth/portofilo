@@ -556,3 +556,39 @@ section{padding:7rem 5rem;scroll-margin-top:2rem;position:relative;z-index:1;}
   .topnav-resume{display:none;}
   .about-bio-card{padding:1.5rem;}
 }
+/* FIX MOBILE NAV - override conflicting rules */
+@media(max-width:768px){
+  .topnav-links{
+    display:flex !important;
+    flex-direction:column !important;
+    position:fixed !important;
+    top:64px !important;
+    left:0 !important;
+    right:0 !important;
+    background:rgba(5,5,8,0.98) !important;
+    backdrop-filter:blur(20px) !important;
+    padding:1rem 1.5rem 1.5rem !important;
+    gap:0.4rem !important;
+    z-index:99 !important;
+    transform:translateY(-120%) !important;
+    transition:transform 0.35s cubic-bezier(0.4,0,0.2,1) !important;
+    border-bottom:1px solid var(--border) !important;
+    align-items:stretch !important;
+    box-shadow:0 20px 40px rgba(0,0,0,0.5) !important;
+  }
+  .topnav-links.mobile-open{transform:translateY(0) !important;}
+  .topnav-link{
+    width:100% !important;
+    text-align:left !important;
+    padding:0.9rem 1.2rem !important;
+    border-radius:10px !important;
+    font-size:1rem !important;
+    color:var(--text) !important;
+    border:1px solid transparent !important;
+  }
+  .topnav-link:hover{background:rgba(124,58,237,0.1) !important;border-color:rgba(124,58,237,0.2) !important;}
+  .topnav-link.active{background:rgba(124,58,237,0.15) !important;color:var(--c1) !important;border-color:rgba(124,58,237,0.3) !important;}
+  [data-theme='light'] .topnav-links{background:rgba(255,255,255,0.98) !important;}
+  [data-theme='light'] .topnav-link{color:#1a1a2e !important;}
+  .hamburger-btn{display:flex !important;align-items:center;justify-content:center;}
+}
