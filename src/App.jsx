@@ -385,7 +385,6 @@ export default function App() {
                 <div key={s.name} className="skill-row">
                   <div className="skill-meta">
                     <span>{s.name}</span>
-                    <span className="skill-pct">{s.level}%</span>
                   </div>
                   <div className="skill-track">
                     <div
@@ -405,7 +404,6 @@ export default function App() {
                 <div key={t.name} className="skill-row">
                   <div className="skill-meta">
                     <span>{t.name}</span>
-                    <span className="skill-pct">{t.level}%</span>
                   </div>
                   <div className="skill-track">
                     <div
