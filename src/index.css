@@ -595,3 +595,8 @@ section{padding:7rem 5rem;scroll-margin-top:2rem;position:relative;z-index:1;}
 .loader-screen{animation:none !important;}
 .loader-screen.fade-out{animation:loaderOut 0.6s ease forwards !important;}
 @keyframes loaderOut{to{opacity:0;visibility:hidden;pointer-events:none;}}
+/* CRITICAL FIX - ensure content is visible */
+.app-root{position:relative;z-index:1;min-height:100vh;}
+.main-wrap{margin-left:0;padding-top:64px;min-height:100vh;position:relative;z-index:2;}
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;}
+body{background:#050508 !important;}

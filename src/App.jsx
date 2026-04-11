@@ -1,5 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react';
-import emailjs from '@emailjs/browser';
+﻿import { useState, useEffect } from 'react';
 
 function useReveal() {
   useEffect(() => {
@@ -21,13 +20,6 @@ export default function App() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState('idle');
   const [darkMode, setDarkMode] = useState(true);
-  const [fadeOut, setFadeOut] = useState(false);
-
-  useEffect(() => {
-    const t1 = setTimeout(() => setFadeOut(true), 2000);
-    const t2 = setTimeout(() => setLoading(false), 2700);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, []);
   useEffect(() => { document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light'); }, [darkMode]);
 
   useEffect(() => {
