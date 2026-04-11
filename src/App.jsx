@@ -1,16 +1,12 @@
 ﻿import { useState, useEffect, useRef } from 'react';
 import emailjs from '@emailjs/browser';
 
-// Animate on scroll hook
 function useReveal() {
   useEffect(() => {
     const els = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver(
       (entries) => entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('revealed');
-          observer.unobserve(e.target);
-        }
+        if (e.isIntersecting) { e.target.classList.add('revealed'); observer.unobserve(e.target); }
       }),
       { threshold: 0.12 }
     );
@@ -20,35 +16,18 @@ function useReveal() {
 }
 
 export default function App() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState('idle');
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [darkMode, setDarkMode] = useState(true);
-  const mainRef = useRef(null);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2800);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-  }, [darkMode]);
-
-  useEffect(() => {
-    const handleMouse = (e) => setMousePos({ x: e.clientX, y: e.clientY });
-    window.addEventListener('mousemove', handleMouse);
-    return () => window.removeEventListener('mousemove', handleMouse);
-  }, []);
+  useEffect(() => { const t = setTimeout(() => setLoading(false), 2800); return () => clearTimeout(t); }, []);
+  useEffect(() => { document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light'); }, [darkMode]);
 
   useEffect(() => {
     const nav = document.querySelector('.topnav');
-    const handleScroll = () => {
-      if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
-    };
+    const handleScroll = () => { if (nav) nav.classList.toggle('scrolled', window.scrollY > 50); };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -66,7 +45,6 @@ export default function App() {
   const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    setMenuOpen(false);
   };
 
   useReveal();
@@ -75,23 +53,7 @@ export default function App() {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
     setFormStatus('sending');
-
-    emailjs.send(
-      'service_portfolio',
-      'template_portfolio',
-      {
-        from_name: formData.name,
-        from_email: formData.email,
-        message: formData.message,
-        to_email: 'kutikantiyashwanth@gmail.com',
-      },
-      'YOUR_EMAILJS_PUBLIC_KEY'
-    ).then(() => {
-      setFormStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setFormStatus('idle'), 6000);
-    }).catch(() => {
-      // Fallback to mailto if EmailJS not configured
+    setTimeout(() => {
       const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
       const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`);
       const a = document.createElement('a');
@@ -100,7 +62,7 @@ export default function App() {
       setFormStatus('success');
       setFormData({ name: '', email: '', message: '' });
       setTimeout(() => setFormStatus('idle'), 6000);
-    });
+    }, 1200);
   };
 
   const skills = [
@@ -121,42 +83,10 @@ export default function App() {
   ];
 
   const projects = [
-    {
-      title: 'GovAssist',
-      subtitle: 'AI Government Assistant',
-      desc: 'AI-powered platform helping citizens navigate government schemes via conversational AI. Built with LangChain and OpenAI.',
-      img: '/images/govassist,png.jpeg',
-      link: 'https://govassistant.vercel.app',
-      tags: ['React.js', 'LangChain', 'OpenAI'],
-      accent: '#7c3aed',
-    },
-    {
-      title: 'EAMCET Predictor',
-      subtitle: 'ML Rank Prediction Engine',
-      desc: 'Predict your rank based on subject marks using historical data and ML trend analysis.',
-      img: '/images/eamcet.png.png',
-      link: 'https://eamcetrankchecker.vercel.app/',
-      tags: ['React.js', 'Supabase', 'ML'],
-      accent: '#06b6d4',
-    },
-    {
-      title: 'GenAI Reports',
-      subtitle: 'Automated BI Reports',
-      desc: 'System converting unstructured data into structured business intelligence reports using GenAI.',
-      img: '/images/genai-report.png.jpeg',
-      link: 'https://reportgenerator.in/',
-      tags: ['Python', 'GenAI APIs'],
-      accent: '#f59e0b',
-    },
-    {
-      title: 'HM Cart',
-      subtitle: 'E-Commerce Marketplace',
-      desc: 'Responsive full-stack e-commerce platform with modern UI, cart management and checkout.',
-      img: '/images/hmcart.png',
-      link: 'https://kutikantiyashwanth.github.io/hm_cart/',
-      tags: ['React.js', 'JavaScript', 'CSS'],
-      accent: '#10b981',
-    },
+    { title: 'GovAssist', subtitle: 'AI Government Assistant', desc: 'AI-powered platform helping citizens navigate government schemes via conversational AI. Built with LangChain and OpenAI.', img: '/images/govassist,png.jpeg', link: 'https://govassistant.vercel.app', tags: ['React.js', 'LangChain', 'OpenAI'], accent: '#7c3aed' },
+    { title: 'EAMCET Predictor', subtitle: 'ML Rank Prediction Engine', desc: 'Predict your rank based on subject marks using historical data and ML trend analysis.', img: '/images/eamcet.png.png', link: 'https://eamcetrankchecker.vercel.app/', tags: ['React.js', 'Supabase', 'ML'], accent: '#06b6d4' },
+    { title: 'GenAI Reports', subtitle: 'Automated BI Reports', desc: 'System converting unstructured data into structured business intelligence reports using GenAI.', img: '/images/genai-report.png.jpeg', link: 'https://reportgenerator.in/', tags: ['Python', 'GenAI APIs'], accent: '#f59e0b' },
+    { title: 'HM Cart', subtitle: 'E-Commerce Marketplace', desc: 'Responsive full-stack e-commerce platform with modern UI, cart management and checkout.', img: '/images/hmcart.png', link: 'https://kutikantiyashwanth.github.io/hm_cart/', tags: ['React.js', 'JavaScript', 'CSS'], accent: '#10b981' },
   ];
 
   if (loading) {
@@ -165,9 +95,7 @@ export default function App() {
         <div className="loader-inner">
           <div className="loader-logo">YK<span className="loader-dot">.</span></div>
           <div className="loader-name">Yashwanth Kutikanti</div>
-          <div className="loader-bar-wrap">
-            <div className="loader-bar-fill" />
-          </div>
+          <div className="loader-bar-wrap"><div className="loader-bar-fill" /></div>
           <div className="loader-sub">Crafting your experience...</div>
         </div>
       </div>
@@ -175,14 +103,7 @@ export default function App() {
   }
 
   return (
-    <div className="app-root" ref={mainRef}>
-      {/* Cursor glow */}
-      <div
-        className="cursor-glow"
-        style={{ left: mousePos.x - 200, top: mousePos.y - 200 }}
-      />
-
-      {/* Background */}
+    <div className="app-root">
       <div className="bg-layer">
         <div className="bg-grid" />
         <div className="bg-orb orb-1" />
@@ -203,11 +124,7 @@ export default function App() {
               { id: 'portfolio', label: 'Projects' },
               { id: 'contact', label: 'Contact' },
             ].map(({ id, label }) => (
-              <button
-                key={id}
-                className={`topnav-link ${activeSection === id ? 'active' : ''}`}
-                onClick={() => scrollTo(id)}
-              >
+              <button key={id} className={`topnav-link ${activeSection === id ? 'active' : ''}`} onClick={() => scrollTo(id)}>
                 {label}
               </button>
             ))}
@@ -224,20 +141,17 @@ export default function App() {
                 </svg>
               )}
             </button>
-            <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="topnav-resume">
-              Resume â†—
-            </a>
+            <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="topnav-resume">Resume</a>
           </div>
         </div>
       </header>
 
       <main className="main-wrap">
+
+        {/* HERO */}
         <section id="home" className="hero">
           <div className="hero-left reveal reveal-left">
-            <div className="hero-badge">
-              <span className="badge-dot" />
-              Available for opportunities
-            </div>
+            <div className="hero-badge"><span className="badge-dot" /> Available for opportunities</div>
             <h1 className="hero-heading">
               Hi, I'm<br />
               <span className="hero-name-grad">Yashwanth</span><br />
@@ -245,14 +159,12 @@ export default function App() {
             </h1>
             <p className="hero-role">AI &amp; Full Stack Developer</p>
             <p className="hero-desc">
-              I build intelligent, scalable digital products â€” from modern web apps to
+              I build intelligent, scalable digital products — from modern web apps to
               AI-powered systems that solve real-world problems with clean code and great UX.
             </p>
             <div className="hero-btns">
-              <a href="#portfolio" className="btn-primary" onClick={e=>{e.preventDefault();scrollTo('portfolio')}}>View My Work</a>
-              <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="btn-ghost">
-                Resume â†—
-              </a>
+              <button className="btn-primary" onClick={() => scrollTo('portfolio')}>View My Work</button>
+              <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="btn-ghost">Resume</a>
             </div>
             <div className="hero-tech-row">
               {['React', 'Python', 'Node.js', 'AWS', 'LangChain', 'OpenAI'].map(t => (
@@ -267,75 +179,45 @@ export default function App() {
               <div className="profile-circle">
                 <img src="/images/yash.jpeg" alt="Yashwanth Kutikanti" className="profile-img" />
               </div>
-              {/* Floating badges */}
-              <div className="float-badge badge-tl">
-                <span className="fb-icon">ðŸš€</span>
-                <span>4+ Projects</span>
-              </div>
-              <div className="float-badge badge-br">
-                <span className="fb-icon">â­</span>
-                <span>7.94 CGPA</span>
-              </div>
-              <div className="float-badge badge-tr">
-                <span className="fb-icon">ðŸ¤–</span>
-                <span>AI Dev</span>
-              </div>
+              <div className="float-badge badge-tl"><span className="fb-icon">🚀</span><span>4+ Projects</span></div>
+              <div className="float-badge badge-br"><span className="fb-icon">⭐</span><span>7.94 CGPA</span></div>
+              <div className="float-badge badge-tr"><span className="fb-icon">🤖</span><span>AI Dev</span></div>
             </div>
           </div>
         </section>
 
-        {/* â”€â”€ ABOUT â”€â”€ */}
+        {/* ABOUT */}
         <section id="about" className="about-section">
           <div className="section-header">
             <span className="section-eyebrow">// about me</span>
             <h2 className="section-title">Who I Am</h2>
           </div>
-
           <div className="about-grid">
             <div className="about-bio-card glass-card reveal reveal-left">
               <div className="about-avatar-mini">
                 <img src="/images/yash.jpeg" alt="Yashwanth" />
-                <div className="avatar-status">
-                  <span className="status-dot" />
-                  Open to work
-                </div>
+                <div className="avatar-status"><span className="status-dot" />Open to work</div>
               </div>
               <div className="about-bio-text">
                 <h3>Yashwanth Kutikanti</h3>
                 <p className="about-role-tag">AI &amp; Full Stack Developer</p>
-                <p>
-                  I'm a passionate developer pursuing B.Tech in AI &amp; Machine Learning at KITS Huzurabad.
-                  I specialize in building end-to-end intelligent applications â€” from sleek React frontends
-                  to powerful Python AI backends.
-                </p>
-                <p>
-                  My mission is to bridge the gap between complex AI technology and real-world usability,
-                  creating products that are both powerful and intuitive.
-                </p>
+                <p>I'm a passionate developer pursuing B.Tech in AI &amp; Machine Learning at KITS Huzurabad. I specialize in building end-to-end intelligent applications — from sleek React frontends to powerful Python AI backends.</p>
+                <p>My mission is to bridge the gap between complex AI technology and real-world usability, creating products that are both powerful and intuitive.</p>
                 <div className="about-tags">
-                  <span>Problem Solver</span>
-                  <span>AI Enthusiast</span>
-                  <span>Clean Code Advocate</span>
-                  <span>Open Source</span>
+                  <span>Problem Solver</span><span>AI Enthusiast</span><span>Clean Code</span><span>Open Source</span>
                 </div>
               </div>
             </div>
 
             <div className="about-cards-col reveal reveal-right">
               <div className="glass-card edu-card">
-                <div className="card-icon-header">
-                  <span className="card-icon">ðŸŽ“</span>
-                  <h3>Education</h3>
-                </div>
+                <div className="card-icon-header"><span className="card-icon">🎓</span><h3>Education</h3></div>
                 <div className="edu-item">
                   <div className="edu-dot" />
                   <div>
                     <h4>KITS Huzurabad</h4>
-                    <p>B.Tech â€” AI &amp; Machine Learning</p>
-                    <div className="edu-meta">
-                      <span className="edu-grade">7.94 CGPA</span>
-                      <span>2022 â€“ 2027</span>
-                    </div>
+                    <p>B.Tech — AI &amp; Machine Learning</p>
+                    <div className="edu-meta"><span className="edu-grade">7.94 CGPA</span><span>2022 – 2027</span></div>
                   </div>
                 </div>
                 <div className="edu-item">
@@ -343,30 +225,21 @@ export default function App() {
                   <div>
                     <h4>Shivani Jr College</h4>
                     <p>Intermediate (MPC)</p>
-                    <div className="edu-meta">
-                      <span className="edu-grade">9.1 CGPA</span>
-                      <span>2020 â€“ 2022</span>
-                    </div>
+                    <div className="edu-meta"><span className="edu-grade">9.1 CGPA</span><span>2020 – 2022</span></div>
                   </div>
                 </div>
               </div>
 
               <div className="glass-card ach-card">
-                <div className="card-icon-header">
-                  <span className="card-icon">ðŸ†</span>
-                  <h3>Achievements</h3>
-                </div>
+                <div className="card-icon-header"><span className="card-icon">🏆</span><h3>Achievements</h3></div>
                 {[
-                  { icon: 'ðŸ”', title: 'Ethical Hacking Internship', sub: 'EduSkills / AICTE â€” Octâ€“Dec 2025' },
-                  { icon: 'â˜ï¸', title: 'AWS Academy Data Engineering', sub: '10-week intensive program' },
-                  { icon: 'âš¡', title: 'CODESTORM 2026', sub: 'National Hackathon Participant' },
+                  { icon: '🔐', title: 'Ethical Hacking Internship', sub: 'EduSkills / AICTE — Oct–Dec 2025' },
+                  { icon: '☁️', title: 'AWS Academy Data Engineering', sub: '10-week intensive program' },
+                  { icon: '⚡', title: 'CODESTORM 2026', sub: 'National Hackathon Participant' },
                 ].map((a, i) => (
                   <div key={i} className="ach-item">
                     <span className="ach-icon">{a.icon}</span>
-                    <div>
-                      <h4>{a.title}</h4>
-                      <p>{a.sub}</p>
-                    </div>
+                    <div><h4>{a.title}</h4><p>{a.sub}</p></div>
                   </div>
                 ))}
               </div>
@@ -374,7 +247,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* â”€â”€ PROCESS â”€â”€ */}
+        {/* PROCESS */}
         <section id="process" className="process-section">
           <div className="section-header">
             <span className="section-eyebrow">// workflow</span>
@@ -382,13 +255,13 @@ export default function App() {
           </div>
           <div className="process-grid">
             {[
-              { n: '01', icon: 'ðŸ’¡', title: 'Ideate', desc: 'Identify problems, brainstorm solutions, and validate ideas with research and user feedback.' },
-              { n: '02', icon: 'ðŸŽ¯', title: 'Plan', desc: 'Define architecture, wireframes, and roadmap for scalable and maintainable implementation.' },
-              { n: '03', icon: 'âš™ï¸', title: 'Build', desc: 'Write clean, maintainable code using modern stacks with AI/ML capabilities integrated.' },
-              { n: '04', icon: 'ðŸ§ª', title: 'Test', desc: 'Rigorous testing, debugging, performance tuning, and security hardening.' },
-              { n: '05', icon: 'ðŸš€', title: 'Ship', desc: 'Deploy to production, monitor metrics, and iterate based on real-world usage data.' },
+              { n: '01', icon: '💡', title: 'Ideate', desc: 'Identify problems, brainstorm solutions, and validate ideas with research and user feedback.' },
+              { n: '02', icon: '🎯', title: 'Plan', desc: 'Define architecture, wireframes, and roadmap for scalable and maintainable implementation.' },
+              { n: '03', icon: '⚙️', title: 'Build', desc: 'Write clean, maintainable code using modern stacks with AI/ML capabilities integrated.' },
+              { n: '04', icon: '🧪', title: 'Test', desc: 'Rigorous testing, debugging, performance tuning, and security hardening.' },
+              { n: '05', icon: '🚀', title: 'Ship', desc: 'Deploy to production, monitor metrics, and iterate based on real-world usage data.' },
             ].map((s, i) => (
-              <div key={i} className="p-card glass-card reveal reveal-up" style={{ animationDelay: `${i * 0.1}s`, transitionDelay: `${i * 0.1}s` }}>
+              <div key={i} className="p-card glass-card reveal reveal-up" style={{ transitionDelay: `${i * 0.1}s` }}>
                 <div className="p-num">{s.n}</div>
                 <div className="p-emoji">{s.icon}</div>
                 <h3>{s.title}</h3>
@@ -398,47 +271,31 @@ export default function App() {
           </div>
         </section>
 
-        {/* â”€â”€ SKILLS â”€â”€ */}
+        {/* SKILLS */}
         <section id="skills" className="skills-section">
           <div className="section-header">
             <span className="section-eyebrow">// expertise</span>
             <h2 className="section-title">Skills &amp; Tools</h2>
           </div>
           <div className="skills-grid">
-            <div className="glass-card">
-              <h3 className="skills-group-title">
-                <span className="skills-group-dot" style={{ background: '#7c3aed' }} />
-                Core Skills
-              </h3>
+            <div className="glass-card reveal reveal-left">
+              <h3 className="skills-group-title"><span className="skills-group-dot" style={{ background: '#7c3aed' }} />Core Skills</h3>
               {skills.map(s => (
                 <div key={s.name} className="skill-row">
-                  <div className="skill-meta">
-                    <span>{s.name}</span>
-                  </div>
+                  <div className="skill-meta"><span>{s.name}</span></div>
                   <div className="skill-track">
-                    <div
-                      className="skill-fill"
-                      style={{ width: `${s.level}%`, background: `linear-gradient(90deg, ${s.color}, #7c3aed)` }}
-                    />
+                    <div className="skill-fill" style={{ width: `${s.level}%`, background: `linear-gradient(90deg, ${s.color}, #7c3aed)` }} />
                   </div>
                 </div>
               ))}
             </div>
-            <div className="glass-card">
-              <h3 className="skills-group-title">
-                <span className="skills-group-dot" style={{ background: '#06b6d4' }} />
-                Tools &amp; Technologies
-              </h3>
+            <div className="glass-card reveal reveal-right">
+              <h3 className="skills-group-title"><span className="skills-group-dot" style={{ background: '#06b6d4' }} />Tools &amp; Technologies</h3>
               {tools.map(t => (
                 <div key={t.name} className="skill-row">
-                  <div className="skill-meta">
-                    <span>{t.name}</span>
-                  </div>
+                  <div className="skill-meta"><span>{t.name}</span></div>
                   <div className="skill-track">
-                    <div
-                      className="skill-fill"
-                      style={{ width: `${t.level}%`, background: `linear-gradient(90deg, ${t.color}, #06b6d4)` }}
-                    />
+                    <div className="skill-fill" style={{ width: `${t.level}%`, background: `linear-gradient(90deg, ${t.color}, #06b6d4)` }} />
                   </div>
                 </div>
               ))}
@@ -446,7 +303,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* â”€â”€ PROJECTS â”€â”€ */}
+        {/* PROJECTS */}
         <section id="portfolio" className="projects-section">
           <div className="section-header">
             <span className="section-eyebrow">// featured work</span>
@@ -458,9 +315,7 @@ export default function App() {
                 <div className="proj-img-wrap">
                   <img src={p.img} alt={p.title} />
                   <div className="proj-overlay">
-                    <a href={p.link} target="_blank" rel="noreferrer" className="proj-live-btn">
-                      View Live â†—
-                    </a>
+                    <a href={p.link} target="_blank" rel="noreferrer" className="proj-live-btn">View Live</a>
                   </div>
                   <div className="proj-accent-bar" style={{ background: p.accent }} />
                 </div>
@@ -473,52 +328,43 @@ export default function App() {
                       <span key={t} className="proj-tag" style={{ borderColor: `${p.accent}40`, color: p.accent, background: `${p.accent}12` }}>{t}</span>
                     ))}
                   </div>
-                  <a href={p.link} target="_blank" rel="noreferrer" className="proj-cta" style={{ color: p.accent }}>
-                    View Project â†’
-                  </a>
+                  <a href={p.link} target="_blank" rel="noreferrer" className="proj-cta" style={{ color: p.accent }}>View Project →</a>
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* â”€â”€ CONTACT â”€â”€ */}
+        {/* CONTACT */}
         <section id="contact" className="contact-section">
           <div className="section-header">
             <span className="section-eyebrow">// get in touch</span>
             <h2 className="section-title">Let's Build Together</h2>
             <p className="section-sub">Have a project in mind? Let's talk and make it happen.</p>
           </div>
-
           <div className="contact-grid">
-            <div className="contact-info">
+            <div className="contact-info reveal reveal-left">
               {[
-                { icon: 'âœ‰ï¸', label: 'Email', value: 'kutikantiyashwanth@gmail.com', href: 'mailto:kutikantiyashwanth@gmail.com' },
-                { icon: 'ðŸ“±', label: 'Phone', value: '+91 9014798201', href: 'tel:+919014798201' },
-                { icon: 'ðŸ“', label: 'Location', value: 'Warangal, Telangana, India', href: null },
+                { icon: '✉️', label: 'Email', value: 'kutikantiyashwanth@gmail.com', href: 'mailto:kutikantiyashwanth@gmail.com' },
+                { icon: '📱', label: 'Phone', value: '+91 9014798201', href: 'tel:+919014798201' },
+                { icon: '📍', label: 'Location', value: 'Warangal, Telangana, India', href: null },
               ].map((c, i) => (
                 <a key={i} href={c.href || '#'} className="contact-card glass-card" style={{ textDecoration: 'none' }}>
                   <div className="contact-icon-wrap">{c.icon}</div>
-                  <div>
-                    <div className="contact-label">{c.label}</div>
-                    <div className="contact-value">{c.value}</div>
-                  </div>
+                  <div><div className="contact-label">{c.label}</div><div className="contact-value">{c.value}</div></div>
                 </a>
               ))}
               <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="btn-primary resume-dl-btn">
-                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                View / Download Resume
+                View Resume
               </a>
             </div>
 
-            <div className="contact-form-wrap glass-card">
+            <div className="contact-form-wrap glass-card reveal reveal-right">
               {formStatus === 'success' ? (
                 <div className="form-success">
-                  <div className="success-icon">âœ…</div>
+                  <div className="success-icon">✅</div>
                   <h3>Message Sent!</h3>
-                  <p>Your email client opened with the message. Please hit send to reach me directly at <strong>kutikantiyashwanth@gmail.com</strong></p>
+                  <p>Your email client opened. Please hit send to reach me at <strong>kutikantiyashwanth@gmail.com</strong></p>
                   <button className="btn-primary" onClick={() => setFormStatus('idle')}>Send Another</button>
                 </div>
               ) : (
@@ -527,52 +373,27 @@ export default function App() {
                   <div className="form-row">
                     <div className="form-field">
                       <label>Your Name</label>
-                      <input
-                        type="text"
-                        placeholder="John Doe"
-                        value={formData.name}
-                        onChange={e => setFormData({ ...formData, name: e.target.value })}
-                        required
-                      />
+                      <input type="text" placeholder="John Doe" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
                     </div>
                     <div className="form-field">
                       <label>Your Email</label>
-                      <input
-                        type="email"
-                        placeholder="john@example.com"
-                        value={formData.email}
-                        onChange={e => setFormData({ ...formData, email: e.target.value })}
-                        required
-                      />
+                      <input type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} required />
                     </div>
                   </div>
                   <div className="form-field">
                     <label>Message</label>
-                    <textarea
-                      placeholder="Tell me about your project..."
-                      rows="5"
-                      value={formData.message}
-                      onChange={e => setFormData({ ...formData, message: e.target.value })}
-                      required
-                    />
+                    <textarea placeholder="Tell me about your project..." rows="5" value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })} required />
                   </div>
                   <button type="submit" className="btn-primary form-submit" disabled={formStatus === 'sending'}>
-                    {formStatus === 'sending' ? (
-                      <><span className="spinner" /> Sending...</>
-                    ) : (
-                      <>Send Message <span>â†’</span></>
-                    )}
+                    {formStatus === 'sending' ? <><span className="spinner" /> Sending...</> : <>Send Message <span>→</span></>}
                   </button>
-                  {formStatus === 'error' && (
-                    <p className="form-error">Something went wrong. Please email directly.</p>
-                  )}
                 </form>
               )}
             </div>
           </div>
         </section>
 
-        {/* â”€â”€ FOOTER â”€â”€ */}
+        {/* FOOTER */}
         <footer className="footer">
           <div className="footer-inner">
             <div className="footer-brand">Yashwanth Kutikanti</div>
@@ -582,12 +403,10 @@ export default function App() {
               <a href="mailto:kutikantiyashwanth@gmail.com">Email</a>
             </div>
           </div>
-          <div className="footer-copy">Built with React &amp; passion â€” {new Date().getFullYear()}</div>
+          <div className="footer-copy">Built with React and passion — {new Date().getFullYear()}</div>
         </footer>
 
       </main>
     </div>
   );
 }
-
-
