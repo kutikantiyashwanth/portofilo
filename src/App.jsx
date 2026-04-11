@@ -1,6 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
 import emailjs from '@emailjs/browser';
 
+// Animate on scroll hook
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('revealed');
+          observer.unobserve(e.target);
+        }
+      }),
+      { threshold: 0.12 }
+    );
+    els.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  });
+}
+
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
@@ -27,6 +45,15 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const nav = document.querySelector('.topnav');
+    const handleScroll = () => {
+      if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
     const sections = document.querySelectorAll('section[id]');
     const observer = new IntersectionObserver(
       (entries) => entries.forEach(e => e.isIntersecting && setActiveSection(e.target.id)),
@@ -41,6 +68,8 @@ export default function App() {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setMenuOpen(false);
   };
+
+  useReveal();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -204,7 +233,7 @@ export default function App() {
 
       <main className="main-wrap">
         <section id="home" className="hero">
-          <div className="hero-left">
+          <div className="hero-left reveal reveal-left">
             <div className="hero-badge">
               <span className="badge-dot" />
               Available for opportunities
@@ -220,7 +249,7 @@ export default function App() {
               AI-powered systems that solve real-world problems with clean code and great UX.
             </p>
             <div className="hero-btns">
-              <a href="#portfolio" className="btn-primary">View My Work</a>
+              <a href="#portfolio" className="btn-primary" onClick={e=>{e.preventDefault();scrollTo('portfolio')}}>View My Work</a>
               <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="btn-ghost">
                 Resume ↗
               </a>
@@ -232,7 +261,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="hero-right">
+          <div className="hero-right reveal reveal-right">
             <div className="profile-wrap">
               <div className="profile-glow" />
               <div className="profile-circle">
@@ -263,7 +292,7 @@ export default function App() {
           </div>
 
           <div className="about-grid">
-            <div className="about-bio-card glass-card">
+            <div className="about-bio-card glass-card reveal reveal-left">
               <div className="about-avatar-mini">
                 <img src="/images/yash.jpeg" alt="Yashwanth" />
                 <div className="avatar-status">
@@ -292,7 +321,7 @@ export default function App() {
               </div>
             </div>
 
-            <div className="about-cards-col">
+            <div className="about-cards-col reveal reveal-right">
               <div className="glass-card edu-card">
                 <div className="card-icon-header">
                   <span className="card-icon">🎓</span>
@@ -359,7 +388,7 @@ export default function App() {
               { n: '04', icon: '🧪', title: 'Test', desc: 'Rigorous testing, debugging, performance tuning, and security hardening.' },
               { n: '05', icon: '🚀', title: 'Ship', desc: 'Deploy to production, monitor metrics, and iterate based on real-world usage data.' },
             ].map((s, i) => (
-              <div key={i} className="p-card glass-card" style={{ animationDelay: `${i * 0.1}s` }}>
+              <div key={i} className="p-card glass-card reveal reveal-up" style={{ animationDelay: `${i * 0.1}s`, transitionDelay: `${i * 0.1}s` }}>
                 <div className="p-num">{s.n}</div>
                 <div className="p-emoji">{s.icon}</div>
                 <h3>{s.title}</h3>
@@ -425,7 +454,7 @@ export default function App() {
           </div>
           <div className="projects-grid">
             {projects.map((p, i) => (
-              <div key={i} className="proj-card glass-card">
+              <div key={i} className="proj-card glass-card reveal reveal-up" style={{ transitionDelay: `${i * 0.12}s` }}>
                 <div className="proj-img-wrap">
                   <img src={p.img} alt={p.title} />
                   <div className="proj-overlay">
