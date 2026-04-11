@@ -37,7 +37,7 @@ export default function App() {
     );
     sections.forEach(s => observer.observe(s));
     return () => observer.disconnect();
-  }, [loading]);
+  }, []);
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -87,18 +87,7 @@ export default function App() {
     { title: 'HM Cart', subtitle: 'E-Commerce Marketplace', desc: 'Responsive full-stack e-commerce platform with modern UI, cart management and checkout.', img: '/images/hmcart.png', link: 'https://kutikantiyashwanth.github.io/hm_cart/', tags: ['React.js', 'JavaScript', 'CSS'], accent: '#10b981' },
   ];
 
-  if (loading) {
-    return (
-      <div className={`loader-screen ${fadeOut ? 'fade-out' : ''}`}>
-        <div className="loader-inner">
-          <div className="loader-logo">YK<span className="loader-dot">.</span></div>
-          <div className="loader-name">Yashwanth Kutikanti</div>
-          <div className="loader-bar-wrap"><div className="loader-bar-fill" /></div>
-          <div className="loader-sub">Crafting your experience...</div>
-        </div>
-      </div>
-    );
-  }
+  if (false) { return null; } // loader removed
 
   return (
     <div className="app-root">
