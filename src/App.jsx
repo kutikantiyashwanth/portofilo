@@ -21,8 +21,13 @@ export default function App() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState('idle');
   const [darkMode, setDarkMode] = useState(true);
+  const [fadeOut, setFadeOut] = useState(false);
 
-  useEffect(() => { const t = setTimeout(() => setLoading(false), 2800); return () => clearTimeout(t); }, []);
+  useEffect(() => {
+    const t1 = setTimeout(() => setFadeOut(true), 2000);
+    const t2 = setTimeout(() => setLoading(false), 2700);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, []);
   useEffect(() => { document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light'); }, [darkMode]);
 
   useEffect(() => {
@@ -92,7 +97,7 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="loader-screen">
+      <div className={`loader-screen ${fadeOut ? 'fade-out' : ''}`}>
         <div className="loader-inner">
           <div className="loader-logo">YK<span className="loader-dot">.</span></div>
           <div className="loader-name">Yashwanth Kutikanti</div>

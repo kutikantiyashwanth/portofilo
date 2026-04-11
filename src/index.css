@@ -592,3 +592,6 @@ section{padding:7rem 5rem;scroll-margin-top:2rem;position:relative;z-index:1;}
   [data-theme='light'] .topnav-link{color:#1a1a2e !important;}
   .hamburger-btn{display:flex !important;align-items:center;justify-content:center;}
 }
+.loader-screen{animation:none !important;}
+.loader-screen.fade-out{animation:loaderOut 0.6s ease forwards !important;}
+@keyframes loaderOut{to{opacity:0;visibility:hidden;pointer-events:none;}}
