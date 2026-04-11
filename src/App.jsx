@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import emailjs from '@emailjs/browser';
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -35,23 +36,42 @@ export default function App() {
     return () => observer.disconnect();
   }, [loading]);
 
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setMenuOpen(false);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
     setFormStatus('sending');
-    setTimeout(() => {
+
+    emailjs.send(
+      'service_portfolio',
+      'template_portfolio',
+      {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        to_email: 'kutikantiyashwanth@gmail.com',
+      },
+      'YOUR_EMAILJS_PUBLIC_KEY'
+    ).then(() => {
+      setFormStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => setFormStatus('idle'), 6000);
+    }).catch(() => {
+      // Fallback to mailto if EmailJS not configured
       const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
-      const body = encodeURIComponent(
-        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-      );
-      const mailtoLink = `mailto:kutikantiyashwanth@gmail.com?subject=${subject}&body=${body}`;
+      const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`);
       const a = document.createElement('a');
-      a.href = mailtoLink;
+      a.href = `mailto:kutikantiyashwanth@gmail.com?subject=${subject}&body=${body}`;
       a.click();
       setFormStatus('success');
       setFormData({ name: '', email: '', message: '' });
       setTimeout(() => setFormStatus('idle'), 6000);
-    }, 1200);
+    });
   };
 
   const skills = [
@@ -173,18 +193,17 @@ export default function App() {
             { id: 'portfolio', label: 'Projects', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z' },
             { id: 'contact', label: 'Contact', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
           ].map(({ id, label, icon }) => (
-            <a
+            <button
               key={id}
-              href={`#${id}`}
               title={label}
               className={`nav-item ${activeSection === id ? 'active' : ''}`}
-              onClick={() => setMenuOpen(false)}
+              onClick={() => scrollTo(id)}
             >
               <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
               </svg>
               <span className="nav-label">{label}</span>
-            </a>
+            </button>
           ))}
         </nav>
         <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="sidebar-resume">
