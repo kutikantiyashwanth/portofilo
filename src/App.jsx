@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import emailjs from '@emailjs/browser';
 
 // Animate on scroll hook
@@ -224,8 +224,8 @@ export default function App() {
                 </svg>
               )}
             </button>
-            <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="topnav-resume">
-              Resume ↗
+            <a href="/images/yashwanth.pdf" download="Yashwanth_Kutikanti_Resume.pdf" className="topnav-resume">
+              Resume â†—
             </a>
           </div>
         </div>
@@ -245,13 +245,13 @@ export default function App() {
             </h1>
             <p className="hero-role">AI &amp; Full Stack Developer</p>
             <p className="hero-desc">
-              I build intelligent, scalable digital products — from modern web apps to
+              I build intelligent, scalable digital products â€” from modern web apps to
               AI-powered systems that solve real-world problems with clean code and great UX.
             </p>
             <div className="hero-btns">
               <a href="#portfolio" className="btn-primary" onClick={e=>{e.preventDefault();scrollTo('portfolio')}}>View My Work</a>
-              <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="btn-ghost">
-                Resume ↗
+              <a href="/images/yashwanth.pdf" download="Yashwanth_Kutikanti_Resume.pdf" className="btn-ghost">
+                Resume â†—
               </a>
             </div>
             <div className="hero-tech-row">
@@ -269,22 +269,22 @@ export default function App() {
               </div>
               {/* Floating badges */}
               <div className="float-badge badge-tl">
-                <span className="fb-icon">🚀</span>
+                <span className="fb-icon">ðŸš€</span>
                 <span>4+ Projects</span>
               </div>
               <div className="float-badge badge-br">
-                <span className="fb-icon">⭐</span>
+                <span className="fb-icon">â­</span>
                 <span>7.94 CGPA</span>
               </div>
               <div className="float-badge badge-tr">
-                <span className="fb-icon">🤖</span>
+                <span className="fb-icon">ðŸ¤–</span>
                 <span>AI Dev</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── ABOUT ── */}
+        {/* â”€â”€ ABOUT â”€â”€ */}
         <section id="about" className="about-section">
           <div className="section-header">
             <span className="section-eyebrow">// about me</span>
@@ -305,7 +305,7 @@ export default function App() {
                 <p className="about-role-tag">AI &amp; Full Stack Developer</p>
                 <p>
                   I'm a passionate developer pursuing B.Tech in AI &amp; Machine Learning at KITS Huzurabad.
-                  I specialize in building end-to-end intelligent applications — from sleek React frontends
+                  I specialize in building end-to-end intelligent applications â€” from sleek React frontends
                   to powerful Python AI backends.
                 </p>
                 <p>
@@ -324,17 +324,17 @@ export default function App() {
             <div className="about-cards-col reveal reveal-right">
               <div className="glass-card edu-card">
                 <div className="card-icon-header">
-                  <span className="card-icon">🎓</span>
+                  <span className="card-icon">ðŸŽ“</span>
                   <h3>Education</h3>
                 </div>
                 <div className="edu-item">
                   <div className="edu-dot" />
                   <div>
                     <h4>KITS Huzurabad</h4>
-                    <p>B.Tech — AI &amp; Machine Learning</p>
+                    <p>B.Tech â€” AI &amp; Machine Learning</p>
                     <div className="edu-meta">
                       <span className="edu-grade">7.94 CGPA</span>
-                      <span>2022 – 2027</span>
+                      <span>2022 â€“ 2027</span>
                     </div>
                   </div>
                 </div>
@@ -345,7 +345,7 @@ export default function App() {
                     <p>Intermediate (MPC)</p>
                     <div className="edu-meta">
                       <span className="edu-grade">9.1 CGPA</span>
-                      <span>2020 – 2022</span>
+                      <span>2020 â€“ 2022</span>
                     </div>
                   </div>
                 </div>
@@ -353,13 +353,13 @@ export default function App() {
 
               <div className="glass-card ach-card">
                 <div className="card-icon-header">
-                  <span className="card-icon">🏆</span>
+                  <span className="card-icon">ðŸ†</span>
                   <h3>Achievements</h3>
                 </div>
                 {[
-                  { icon: '🔐', title: 'Ethical Hacking Internship', sub: 'EduSkills / AICTE — Oct–Dec 2025' },
-                  { icon: '☁️', title: 'AWS Academy Data Engineering', sub: '10-week intensive program' },
-                  { icon: '⚡', title: 'CODESTORM 2026', sub: 'National Hackathon Participant' },
+                  { icon: 'ðŸ”', title: 'Ethical Hacking Internship', sub: 'EduSkills / AICTE â€” Octâ€“Dec 2025' },
+                  { icon: 'â˜ï¸', title: 'AWS Academy Data Engineering', sub: '10-week intensive program' },
+                  { icon: 'âš¡', title: 'CODESTORM 2026', sub: 'National Hackathon Participant' },
                 ].map((a, i) => (
                   <div key={i} className="ach-item">
                     <span className="ach-icon">{a.icon}</span>
@@ -374,7 +374,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── PROCESS ── */}
+        {/* â”€â”€ PROCESS â”€â”€ */}
         <section id="process" className="process-section">
           <div className="section-header">
             <span className="section-eyebrow">// workflow</span>
@@ -382,11 +382,11 @@ export default function App() {
           </div>
           <div className="process-grid">
             {[
-              { n: '01', icon: '💡', title: 'Ideate', desc: 'Identify problems, brainstorm solutions, and validate ideas with research and user feedback.' },
-              { n: '02', icon: '🎯', title: 'Plan', desc: 'Define architecture, wireframes, and roadmap for scalable and maintainable implementation.' },
-              { n: '03', icon: '⚙️', title: 'Build', desc: 'Write clean, maintainable code using modern stacks with AI/ML capabilities integrated.' },
-              { n: '04', icon: '🧪', title: 'Test', desc: 'Rigorous testing, debugging, performance tuning, and security hardening.' },
-              { n: '05', icon: '🚀', title: 'Ship', desc: 'Deploy to production, monitor metrics, and iterate based on real-world usage data.' },
+              { n: '01', icon: 'ðŸ’¡', title: 'Ideate', desc: 'Identify problems, brainstorm solutions, and validate ideas with research and user feedback.' },
+              { n: '02', icon: 'ðŸŽ¯', title: 'Plan', desc: 'Define architecture, wireframes, and roadmap for scalable and maintainable implementation.' },
+              { n: '03', icon: 'âš™ï¸', title: 'Build', desc: 'Write clean, maintainable code using modern stacks with AI/ML capabilities integrated.' },
+              { n: '04', icon: 'ðŸ§ª', title: 'Test', desc: 'Rigorous testing, debugging, performance tuning, and security hardening.' },
+              { n: '05', icon: 'ðŸš€', title: 'Ship', desc: 'Deploy to production, monitor metrics, and iterate based on real-world usage data.' },
             ].map((s, i) => (
               <div key={i} className="p-card glass-card reveal reveal-up" style={{ animationDelay: `${i * 0.1}s`, transitionDelay: `${i * 0.1}s` }}>
                 <div className="p-num">{s.n}</div>
@@ -398,7 +398,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── SKILLS ── */}
+        {/* â”€â”€ SKILLS â”€â”€ */}
         <section id="skills" className="skills-section">
           <div className="section-header">
             <span className="section-eyebrow">// expertise</span>
@@ -446,7 +446,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── PROJECTS ── */}
+        {/* â”€â”€ PROJECTS â”€â”€ */}
         <section id="portfolio" className="projects-section">
           <div className="section-header">
             <span className="section-eyebrow">// featured work</span>
@@ -459,7 +459,7 @@ export default function App() {
                   <img src={p.img} alt={p.title} />
                   <div className="proj-overlay">
                     <a href={p.link} target="_blank" rel="noreferrer" className="proj-live-btn">
-                      View Live ↗
+                      View Live â†—
                     </a>
                   </div>
                   <div className="proj-accent-bar" style={{ background: p.accent }} />
@@ -474,7 +474,7 @@ export default function App() {
                     ))}
                   </div>
                   <a href={p.link} target="_blank" rel="noreferrer" className="proj-cta" style={{ color: p.accent }}>
-                    View Project →
+                    View Project â†’
                   </a>
                 </div>
               </div>
@@ -482,7 +482,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── CONTACT ── */}
+        {/* â”€â”€ CONTACT â”€â”€ */}
         <section id="contact" className="contact-section">
           <div className="section-header">
             <span className="section-eyebrow">// get in touch</span>
@@ -493,9 +493,9 @@ export default function App() {
           <div className="contact-grid">
             <div className="contact-info">
               {[
-                { icon: '✉️', label: 'Email', value: 'kutikantiyashwanth@gmail.com', href: 'mailto:kutikantiyashwanth@gmail.com' },
-                { icon: '📱', label: 'Phone', value: '+91 9014798201', href: 'tel:+919014798201' },
-                { icon: '📍', label: 'Location', value: 'Warangal, Telangana, India', href: null },
+                { icon: 'âœ‰ï¸', label: 'Email', value: 'kutikantiyashwanth@gmail.com', href: 'mailto:kutikantiyashwanth@gmail.com' },
+                { icon: 'ðŸ“±', label: 'Phone', value: '+91 9014798201', href: 'tel:+919014798201' },
+                { icon: 'ðŸ“', label: 'Location', value: 'Warangal, Telangana, India', href: null },
               ].map((c, i) => (
                 <a key={i} href={c.href || '#'} className="contact-card glass-card" style={{ textDecoration: 'none' }}>
                   <div className="contact-icon-wrap">{c.icon}</div>
@@ -505,7 +505,7 @@ export default function App() {
                   </div>
                 </a>
               ))}
-              <a href="/images/yashwanth.pdf" target="_blank" rel="noreferrer" className="btn-primary resume-dl-btn">
+              <a href="/images/yashwanth.pdf" download="Yashwanth_Kutikanti_Resume.pdf" className="btn-primary resume-dl-btn">
                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
@@ -516,7 +516,7 @@ export default function App() {
             <div className="contact-form-wrap glass-card">
               {formStatus === 'success' ? (
                 <div className="form-success">
-                  <div className="success-icon">✅</div>
+                  <div className="success-icon">âœ…</div>
                   <h3>Message Sent!</h3>
                   <p>Your email client opened with the message. Please hit send to reach me directly at <strong>kutikantiyashwanth@gmail.com</strong></p>
                   <button className="btn-primary" onClick={() => setFormStatus('idle')}>Send Another</button>
@@ -560,7 +560,7 @@ export default function App() {
                     {formStatus === 'sending' ? (
                       <><span className="spinner" /> Sending...</>
                     ) : (
-                      <>Send Message <span>→</span></>
+                      <>Send Message <span>â†’</span></>
                     )}
                   </button>
                   {formStatus === 'error' && (
@@ -572,7 +572,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── FOOTER ── */}
+        {/* â”€â”€ FOOTER â”€â”€ */}
         <footer className="footer">
           <div className="footer-inner">
             <div className="footer-brand">Yashwanth Kutikanti</div>
@@ -582,10 +582,11 @@ export default function App() {
               <a href="mailto:kutikantiyashwanth@gmail.com">Email</a>
             </div>
           </div>
-          <div className="footer-copy">Built with React &amp; passion — {new Date().getFullYear()}</div>
+          <div className="footer-copy">Built with React &amp; passion â€” {new Date().getFullYear()}</div>
         </footer>
 
       </main>
     </div>
   );
 }
+
