@@ -245,6 +245,7 @@ export default function App() {
               <div className="glass-card ach-card">
                 <div className="card-icon-header"><span className="card-icon">🏆</span><h3>Achievements</h3></div>
                 {[
+                  { icon: '💻', title: 'Software Engineer Intern', sub: 'Student Forge Technology Pvt' },
                   { icon: '🔐', title: 'Ethical Hacking Internship', sub: 'EduSkills / AICTE — Oct–Dec 2025' },
                   { icon: '☁️', title: 'AWS Academy Data Engineering', sub: '10-week intensive program' },
                   { icon: '⚡', title: 'CODESTORM 2026', sub: 'National Hackathon Participant' },
