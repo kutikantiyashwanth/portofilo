@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 function useReveal() {
   useEffect(() => {
@@ -87,6 +87,7 @@ export default function App() {
   ];
 
   const projects = [
+    { title: 'Student Bug Tracker', subtitle: 'Full Stack Web Application', desc: 'A full-stack bug tracking platform with task management, Kanban board, sprint planning, and real-time notifications via Socket.io.', img: '/images/bug_tracker.png', link: 'https://bug-tracker-ui-evqv.onrender.com', tags: ['React.js', 'Node.js', 'PostgreSQL', 'Prisma', 'Socket.io', 'JWT'], accent: '#f43f5e' },
     { title: 'GovAssist', subtitle: 'AI Government Assistant', desc: 'AI-powered platform helping citizens navigate government schemes via conversational AI. Built with LangChain and OpenAI.', img: '/images/govassist,png.jpeg', link: 'https://govassistant.vercel.app', tags: ['React.js', 'LangChain', 'OpenAI'], accent: '#7c3aed' },
     { title: 'EAMCET Predictor', subtitle: 'ML Rank Prediction Engine', desc: 'Predict your rank based on subject marks using historical data and ML trend analysis.', img: '/images/eamcet.png.png', link: 'https://eamcetrankchecker.vercel.app/', tags: ['React.js', 'Supabase', 'ML'], accent: '#06b6d4' },
     { title: 'GenAI Reports', subtitle: 'Automated BI Reports', desc: 'System converting unstructured data into structured business intelligence reports using GenAI.', img: '/images/genai-report.png.jpeg', link: 'https://reportgenerator.in/', tags: ['Python', 'GenAI APIs'], accent: '#f59e0b' },
